@@ -5,7 +5,7 @@ connection.query('SELECT * FROM medico', (err, results) => {
         console.error('Erro ao realizar a consulta, ', err.stack)
         return
     }
-    console.log('Resultados da consulta:', results)
+    console.log('Resultados da consulta:', results) //
 })
 
 connection.end()
