@@ -1,19 +1,115 @@
 import Header from "../components/header.jsx";
-import Crianças from "../assets/image/Crianças.jpg"; 
+import Footer from "../components/footer.jsx";
+import MedSync from "../assets/image/MedSync.png"
+import VidMed from "../assets/image/VidMed.mp4";
+import { FaFileAlt, FaCalendarAlt, FaUsers } from "react-icons/fa";
 
 function Principal() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <img 
-        src={Crianças} 
-        alt="Logo MedSync Clínica Infantil"
-        className="mx-auto max-w-xs md:max-w-md"
-      />
-      <main className="flex-grow p-4">
-        <h1 className="text-2xl font-bold">Bem-vindo à minha página</h1>
-        <p className="mt-2">Conteúdo da página aqui...</p>
-      </main>
+      {/* Aqui o vídeo cresce pra ocupar todo o espaço entre header e footer */}
+      <div className="flex-grow">
+        <div className="w-full h-full">
+          <video
+            src={VidMed} // não esqueça de importar acima!
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+
+      {/* Seção dos Cards */}
+      <section className="bg-white py-12 px-4 md:px-20">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Card 1 */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="bg-red-500 p-4 rounded-full text-white text-2xl">
+                <FaFileAlt />
+              </div>
+            </div>
+            <h3 className="text-xl font-semibold text-indigo-900 mb-2">
+              Atendimento de qualidade
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Controle simples e seguro das transações financeiras e legais da
+              sua organização. Envie faturas e contratos personalizados.
+            </p>
+          </div>
+
+          {/* Card 2 */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="bg-teal-500 p-4 rounded-full text-white text-2xl">
+                <FaCalendarAlt />
+              </div>
+            </div>
+            <h3 className="text-xl font-semibold text-indigo-900 mb-2">
+              Agendamento personalizado
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Agende salas para um ou mais locais. Mantenha registros detalhados
+              de presença.
+            </p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="bg-yellow-500 p-4 rounded-full text-white text-2xl">
+                <FaUsers />
+              </div>
+            </div>
+            <h3 className="text-xl font-semibold text-indigo-900 mb-2">
+              Profissionais capacitados
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Automatize e acompanhe emails para indivíduos ou grupos. Organize sua
+              equipe com sistemas integrados.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção "O que somos?" */}
+      <section className="bg-[#DFF3F4] py-12 px-6 md:px-20">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
+          {/* Logo colorida */}
+          <div className="flex-shrink-0">
+            <img
+              src={MedSync}
+              alt="Logo MedSync"
+              className="w-60 md:w-72"
+            />
+          </div>
+
+          {/* Texto explicativo */}
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#008E9A] mb-4">
+              O que somos?
+            </h2>
+            <p className="text-gray-800 text-base mb-4">
+              <strong>MedSync</strong> é uma plataforma moderna de agendamento de
+              consultas médicas, desenvolvida para facilitar a conexão entre
+              pacientes e profissionais da saúde.
+              <br />
+              Com uma interface intuitiva e tecnologia avançada, o MedSync permite:
+            </p>
+            <ul className="list-disc list-inside text-gray-800 space-y-2">
+              <li><strong>Agendar consultas rapidamente</strong></li>
+              <li><strong>Gerenciar horários de forma eficiente</strong></li>
+              <li><strong>Acesso seguro com autenticação</strong></li>
+              <li><strong>Experiência simplificada para médicos e pacientes</strong></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

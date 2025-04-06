@@ -2,40 +2,48 @@ import { Typography } from "@material-tailwind/react";
 
 function Footer() {
   return (
-    <footer className="w-full bg-[#008E9A] p-8">
-      <div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 bg-[#008E9A] text-center md:justify-between">
-        <img
-          src="./src/assets/image/MedSyncBranco.png"
-          alt="logo-ct"
-          className="w-60"
-        />
-        <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
-          <li>
-            <Typography
-              as="a"
-              href="#"
-              color="blue-gray"
-              className="font-normal transition-colors hover:text-[#A3DDEA] focus: text-white"
-            >
-              Atendimentos
-            </Typography>
-          </li>
-          <li>
-            <Typography
-              as="a"
-              href="#"
-              color="blue-gray"
-              className="font-normal transition-colors hover:text-[#A3DDEA] focus: text-white"
-            >
-              Contato
-            </Typography>
-          </li>
-        </ul>
+    <footer className="w-full bg-[#008E9A] p-8 pt-0">
+      <div className="max-w-screen-xl mx-auto px-4">
+        {/* Container com logo e links */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Logo */}
+          <img
+            src="./src/assets/image/MedSyncBranco.png"
+            alt="Logo MedSync"
+            className="w-40 md:w-60"
+          />
+
+          {/* Links do rodapé */}
+          <ul className="flex flex-wrap justify-center gap-6 md:gap-8">
+            <li>
+              <Typography
+                as="a"
+                href="#"
+                className="font-normal text-white hover:text-[#A3DDEA] transition-colors"
+              >
+                Atendimentos
+              </Typography>
+            </li>
+            <li>
+              <Typography
+                as="a"
+                href="#"
+                className="font-normal text-white hover:text-[#A3DDEA] transition-colors"
+              >
+                Contato
+              </Typography>
+            </li>
+          </ul>
+        </div>
+
+        {/* Linha divisória */}
+        <hr className="my-6 border-white" />
+
+        {/* Texto de direitos autorais */}
+        <Typography className="text-center text-white font-normal">
+          © 2025 MedSync.
+        </Typography>
       </div>
-      <hr className="my-8 border-white" />
-      <Typography color="white" className="text-center font-normal">
-        &copy; 2025 MedSync
-      </Typography>
     </footer>
   );
 }
