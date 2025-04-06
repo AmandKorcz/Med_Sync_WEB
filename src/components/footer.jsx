@@ -4,16 +4,12 @@ function Footer() {
   return (
     <footer className="w-full bg-[#008E9A] p-8 pt-0">
       <div className="max-w-screen-xl mx-auto px-4">
-        {/* Container com logo e links */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo */}
           <img
             src="./src/assets/image/MedSyncBranco.png"
             alt="Logo MedSync"
             className="w-40 md:w-60"
           />
-
-          {/* Links do rodapé */}
           <ul className="flex flex-wrap justify-center gap-6 md:gap-8">
             <li>
               <Typography
@@ -35,11 +31,7 @@ function Footer() {
             </li>
           </ul>
         </div>
-
-        {/* Linha divisória */}
         <hr className="my-6 border-white" />
-
-        {/* Texto de direitos autorais */}
         <Typography className="text-center text-white font-normal">
           © 2025 MedSync.
         </Typography>

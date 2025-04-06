@@ -8,23 +8,19 @@ function Principal() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      {/* Aqui o vídeo cresce pra ocupar todo o espaço entre header e footer */}
-      <div className="flex-grow">
-        <div className="w-full h-full">
-          <video
-            src={VidMed} // não esqueça de importar acima!
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
-
-      {/* Seção dos Cards */}
+      <section className="relative w-full h-[calc(100vh-64px)] overflow-hidden">
+      <video
+        src={VidMed}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+    </section>
       <section className="bg-white py-12 px-4 md:px-20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+
           {/* Card 1 */}
           <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
             <div className="flex justify-center mb-4">
@@ -78,7 +74,6 @@ function Principal() {
       {/* Seção "O que somos?" */}
       <section className="bg-[#DFF3F4] py-12 px-6 md:px-20">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
-          {/* Logo colorida */}
           <div className="flex-shrink-0">
             <img
               src={MedSync}
@@ -86,8 +81,6 @@ function Principal() {
               className="w-60 md:w-72"
             />
           </div>
-
-          {/* Texto explicativo */}
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-[#008E9A] mb-4">
               O que somos?
