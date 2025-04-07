@@ -8,13 +8,13 @@ function Principal() {
   return (
     <div className="flex flex-col min-h-screen">
     <Header />
-    <div className="w-screen">
-  <img
-      src={Crianças}
-      alt="Imagem principal"
-      className="w-screen h-screen object-cover"
-    />
-  </div>
+    <div className="w-full">
+        <img
+          src={Crianças}
+          alt="Imagem principal"
+          className="w-full h-screen object-cover object-top"
+        />
+      </div>
       <section className="bg-white py-12 px-4 md:px-20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
 
