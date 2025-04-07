@@ -32,8 +32,8 @@ function Principal() {
               Atendimento de qualidade
             </h3>
             <p className="text-gray-600 text-sm">
-              Controle simples e seguro das transações financeiras e legais da
-              sua organização. Envie faturas e contratos personalizados.
+            Tenha acesso rápido e fácil ao nosso time de atendimento!
+            Conte com uma equipe pronta para te ajudar com agilidade e eficiência sempre que precisar.
             </p>
           </div>
 
@@ -48,8 +48,8 @@ function Principal() {
               Agendamento personalizado
             </h3>
             <p className="text-gray-600 text-sm">
-              Agende salas para um ou mais locais. Mantenha registros detalhados
-              de presença.
+            Visualize facilmente os horários disponíveis e escolha o que for melhor para você.
+            Agende com poucos cliques e acompanhe tudo de forma organizada!
             </p>
           </div>
 
@@ -64,8 +64,8 @@ function Principal() {
               Profissionais capacitados
             </h3>
             <p className="text-gray-600 text-sm">
-              Automatize e acompanhe emails para indivíduos ou grupos. Organize
-              sua equipe com sistemas integrados.
+            Encontre uma ampla variedade de médicos especializados à sua disposição.
+            Escolha o profissional ideal para o seu atendimento, com confiança e comodidade.
             </p>
           </div>
         </div>
