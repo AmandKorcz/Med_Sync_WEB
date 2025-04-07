@@ -1,23 +1,20 @@
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
-import MedSync from "../assets/image/MedSync.png"
-import VidMed from "../assets/image/VidMed.mp4";
+import MedSync from "../assets/image/MedSync.png"; 
+import Crianças from "../assets/image/Crianças.jpg"
 import { FaFileAlt, FaCalendarAlt, FaUsers } from "react-icons/fa";
 
 function Principal() {
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
-      <section className="relative w-full h-[calc(100vh-64px)] overflow-hidden">
-      <video
-        src={VidMed}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-    </section>
+    <Header />
+    <div className="w-screen">
+  <img
+      src={Crianças}
+      alt="Imagem principal"
+      className="w-screen h-screen object-cover"
+    />
+  </div>
       <section className="bg-white py-12 px-4 md:px-20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
 
