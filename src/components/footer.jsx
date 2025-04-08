@@ -2,9 +2,9 @@ import { Typography } from "@material-tailwind/react";
 
 function Footer() {
   return (
-    <footer className="w-full bg-[#008E9A] p-8 pt-0">
-      <div className="max-w-screen-xl mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+    <footer className="w-full bg-[#008E9A] p-10 pb-10 pt-12 h-50">
+    <div className="max-w-screen-xl mx-auto px-6">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <img
             src="./src/assets/image/MedSyncBranco.png"
             alt="Logo MedSync"

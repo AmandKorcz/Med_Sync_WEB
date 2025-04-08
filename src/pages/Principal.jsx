@@ -1,7 +1,6 @@
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
-import MedSync from "../assets/image/MedSync.png";
-// import Crianças from "../assets/image/Crianças.jpg"
+import MedLocal from "../assets/image/MedLocal.jpg" 
 import { FaFileAlt, FaCalendarAlt, FaUsers } from "react-icons/fa";
 import VidMed from "../assets/image/MedVideo.mp4";
 
@@ -71,44 +70,77 @@ function Principal() {
         </div>
       </section>
 
-      {/* Seção "O que somos?" */}
-      <section className="bg-[#DFF3F4] py-12 px-6 md:px-20">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
-          <div className="flex-shrink-0">
-            <img src={MedSync} alt="Logo MedSync" className="w-60 md:w-72" />
-          </div>
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#008E9A] mb-4">
-              O que somos?
-            </h2>
-            <p className="text-gray-800 text-base mb-4">
-              <strong>MedSync</strong> é uma plataforma moderna de agendamento
-              de consultas médicas, desenvolvida para facilitar a conexão entre
-              pacientes e profissionais da saúde.
-              <br />
-              Com uma interface intuitiva e tecnologia avançada, o MedSync
-              permite:
-            </p>
-            <ul className="list-disc list-inside text-gray-800 space-y-2">
-              <li>
-                <strong>Agendar consultas rapidamente</strong>
-              </li>
-              <li>
-                <strong>Gerenciar horários de forma eficiente</strong>
-              </li>
-              <li>
-                <strong>Acesso seguro com autenticação</strong>
-              </li>
-              <li>
-                <strong>
-                  Experiência simplificada para médicos e pacientes
-                </strong>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
+    {/* Seção "O que somos?" - Versão Aprimorada */}
+<section className="bg-gradient-to-r from-[#DFF3F4] to-[#E6F7F8] py-16 px-6 md:px-20">
+  <div className="max-w-6xl mx-auto">
+    <div className="flex flex-col md:flex-row items-center gap-12">
+      {/* Imagem com efeitos */}
+      <div className="flex-shrink-0 transform hover:scale-105 transition duration-500">
+        <img 
+          src={MedLocal} 
+          alt="Logo MedSync" 
+          className="w-64 md:w-80 drop-shadow-lg rounded-lg" 
+        />
+      </div>
+      
+      {/* Conteúdo de texto */}
+      <div className="space-y-6">
+      <h2 className="text-3xl md:text-4xl font-bold text-[#008E9A] mb-2">
+      <span className="pb-2">Quem somos?</span>
+        </h2>
+        
+        <p className="text-gray-700 text-lg leading-relaxed">
+          <strong className="text-[#007A87]">MedSync</strong> é uma plataforma moderna de agendamento
+          de consultas médicas, desenvolvida para facilitar a conexão entre
+          pacientes e profissionais da saúde.
+        </p>
+        
+        <p className="text-gray-700 text-lg leading-relaxed">
+          Com uma interface intuitiva e tecnologia avançada, o MedSync
+          permite:
+        </p>
+        
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <li className="flex items-start space-x-3 bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <div className="bg-[#00B4C5] p-2 rounded-full">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <span className="text-gray-800 font-medium">Agendar consultas rapidamente</span>
+          </li>
+          
+          <li className="flex items-start space-x-3 bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <div className="bg-[#00B4C5] p-2 rounded-full">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <span className="text-gray-800 font-medium">Gerenciar horários de forma eficiente</span>
+          </li>
+          
+          <li className="flex items-start space-x-3 bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <div className="bg-[#00B4C5] p-2 rounded-full">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <span className="text-gray-800 font-medium">Acesso seguro com autenticação</span>
+          </li>
+          
+          <li className="flex items-start space-x-3 bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <div className="bg-[#00B4C5] p-2 rounded-full">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <span className="text-gray-800 font-medium">Experiência simplificada para médicos e pacientes</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
       <Footer />
     </div>
   );
