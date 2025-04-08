@@ -1,28 +1,29 @@
 import { Typography } from "@material-tailwind/react";
+import MedSyncBranco from "../assets/image/MedSyncBranco.png";
 
 function Header() {
   return (
-    <footer className="w-full bg-[#49BBBD] p-8">
-      <div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 bg-[#49BBBD] text-center md:justify-between">
-        <img
-          src="./src/assets/image/MedSyncBranco.png"
-          alt="logo-ct"
-          className="w-60"
-        />
-        <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
-          <li>
-            <Typography
-              as="a"
-              href="#"
-              color="blue-gray"
-              className="font-normal transition-colors hover:text-[#A3DDEA] focus: text-white"
-            >
-              Atendimentos
-            </Typography>
-          </li>
-        </ul>
+    <header className="fixed top-0 left-0 w-full h-[10vh] bg-[#49BBBD] py-4 shadow-lg z-50">
+      <div className="px-4 sm:px-6 flex items-center justify-between">
+        <div className="flex items-center">
+          <img src={MedSyncBranco} className="h-10 w-auto mr-4" />
+        </div>
+        <nav className="hidden md:flex space-x-8">
+          <Typography
+            as="a"
+            href="#"
+            className="text-white hover:text-[#A3DDEA] transition-colors"
+          >
+            Atendimentos
+          </Typography>
+        </nav>
+        <button className="md:hidden text-white">
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
-    </footer>
+    </header>
   );
 }
 
