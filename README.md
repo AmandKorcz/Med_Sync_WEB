@@ -50,7 +50,6 @@ Read: Visualização dos pacientes dos horários disponíveis/indisponíveis <br
 Update: Atualizar cadastro do médico <br>
 Delete: Deletar cadastro do médico <br>
 Delete adicional: Deletar a agendamento do paciente <br>
-<br>
 
 <h3>Frontend</h3>
 Planejamento e execução do protótipo da aplicação no Figma.<br>
