@@ -12,7 +12,6 @@ Com uma interface intuitiva, o MedSync permitirá: <br>
 - Gerenciar horários de forma eficiente
 - Acesso seguro com autenticação
 - Experiência simplificada para médicos e pacientes.
-<br>
 
 <h2>Tecnologias da Aplicação ⚙</h2>
 
