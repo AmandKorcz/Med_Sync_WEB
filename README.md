@@ -16,7 +16,8 @@ Com uma interface intuitiva, o MedSync permitirá: <br>
 <h2>Tecnologias da Aplicação ⚙</h2>
 
 O projeto explora as seguintes tecnologias
-- Protótipo: Figma | https://www.figma.com/design/dXYr0pZcivGla5FqEZlu7M/MedSync?node-id=0-1&t=xuBF85ODqzFKkprE-1 
+- Protótipo: Figma | https://www.figma.com/design/dXYr0pZcivGla5FqEZlu7M/MedSync?node-id=0-1&t=xuBF85ODqzFKkprE-1
+- Gerenciamento e planejamento das atividades: Jira Atlassian | https://medsyncpac.atlassian.net/jira/software/projects/KAN/boards/1
 - FrontEnd: React, JavaScript visando uma interface dinâmica e responsiva
 - Backend: Node.js, CRUD, leve e eficiente para o nosso desenvolvimento
 - Banco de dados: MySQL, adequado para o armazenamento de dados estruturado
