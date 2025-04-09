@@ -1,12 +1,25 @@
 import { Typography } from "@material-tailwind/react";
 import MedSyncBranco from "../assets/image/MedSyncBranco.png";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+
+  const navigate = useNavigate();
+
+  const PagePrincipal = () => {
+    navigate("/");
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full h-[10vh] bg-[#49BBBD] py-4 shadow-lg z-50">
       <div className="px-4 sm:px-6 flex items-center justify-between">
         <div className="flex items-center">
-          <img src={MedSyncBranco} className="h-10 w-auto mr-4" />
+          <img 
+            src={MedSyncBranco} 
+            className="h-10 w-auto mr-4" 
+            onClick={PagePrincipal}
+            alt="MedSyncBranco"
+          />
         </div>
         <nav className="hidden md:flex space-x-8">
           <Typography
