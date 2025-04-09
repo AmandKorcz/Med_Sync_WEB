@@ -16,7 +16,7 @@ function Header() {
         <div className="flex items-center">
           <img 
             src={MedSyncBranco} 
-            className="h-10 w-auto mr-4" 
+            className="h-10 w-auto mr-4 cursor-pointer" 
             onClick={PagePrincipal}
             alt="MedSyncBranco"
           />
