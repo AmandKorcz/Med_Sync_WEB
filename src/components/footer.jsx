@@ -1,4 +1,5 @@
 import { Typography } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -27,6 +28,15 @@ function Footer() {
                 className="font-normal text-white hover:text-[#A3DDEA] transition-colors"
               >
                 Contato
+              </Typography>
+            </li>
+            <li>
+              <Typography
+               as={Link}
+               to="/login" 
+                className="font-normal text-white hover:text-[#A3DDEA] transition-colors"
+              >
+                Administração 
               </Typography>
             </li>
           </ul>

@@ -1,13 +1,14 @@
-import "./App.css";
-import "./App.jsx";
-import Principal from "./pages/Principal.jsx";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Principal from "./pages/Principal";
+import Login from "./pages/Login";
 
 function App() {
   return (
-    <div>
-      <Principal /> 
-    </div>
+      <Routes>
+        <Route path="/" element={<Principal />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
   );
 }
 
-export default App;
+export default App; 
