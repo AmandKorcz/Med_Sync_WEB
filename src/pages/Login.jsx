@@ -15,12 +15,8 @@ function Login() {
                         <div className="text-center">
                             <h1 className="text-2xl font-bold text-[#49BBBD] mb-2">MedSync</h1>
                             <p className="text-sm text-gray-600 mb-4">CLINICA INFANTIL</p>
-                            
                             <p className="text-sm mb-4">Faça login em sua conta</p>
-                           
                         </div>
-
-                        {/* Formulário */}
                         <div className="space-y-4">
                             <div>
                                 <label className="block text-sm mb-1 text-gray-700">Nome</label>
@@ -51,8 +47,6 @@ function Login() {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Botão Login */}
                         <button className="w-full bg-[#49BBBD] text-white px-10 py-2 rounded-full hover:bg-[#3aa9ab] transition">
                             Login
                         </button>

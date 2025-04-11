@@ -70,11 +70,10 @@ function Principal() {
         </div>
       </section>
 
-    {/* Seção "O que somos?" - Versão Aprimorada */}
+    {/* Seção "O que somos?" */}
 <section className="bg-gradient-to-r from-[#DFF3F4] to-[#E6F7F8] py-16 px-6 md:px-20">
   <div className="max-w-6xl mx-auto">
     <div className="flex flex-col md:flex-row items-center gap-12">
-      {/* Imagem com efeitos */}
       <div className="flex-shrink-0 transform hover:scale-105 transition duration-500">
         <img 
           src={MedLocal} 
@@ -82,8 +81,6 @@ function Principal() {
           className="w-64 md:w-80 drop-shadow-lg rounded-lg" 
         />
       </div>
-      
-      {/* Conteúdo de texto */}
       <div className="space-y-6">
       <h2 className="text-3xl md:text-4xl font-bold text-[#008E9A] mb-2">
       <span className="pb-2">Quem somos?</span>
