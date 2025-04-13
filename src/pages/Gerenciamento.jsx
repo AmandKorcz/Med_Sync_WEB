@@ -3,7 +3,6 @@ import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
 
 function Gerenciamento() {
-  // Estado inicial com mais dados e estrutura melhorada
   const [medicos, setMedicos] = useState([
     {
       id: 1,
@@ -53,7 +52,7 @@ function Gerenciamento() {
     }
   ]);
 
-  // Estado para novo médico com validação
+  // Arquitetura para Novo médico com validação
   const [novoMedico, setNovoMedico] = useState({
     nome: "",
     crm: "",
@@ -61,14 +60,14 @@ function Gerenciamento() {
     notas: ""
   });
 
-  // Estado para controle de erros
+  // controle de erros (inicio de testes)
   const [erros, setErros] = useState({
     nome: "",
     crm: "",
     especializacao: ""
   });
 
-  // Estado para busca/filtro
+  // busca/filtro
   const [filtro, setFiltro] = useState("");
 
   // Adicionar paciente a um horário
@@ -141,7 +140,7 @@ function Gerenciamento() {
     setMedicos(medicos.map(medico => {
       if (medico.id === medicoId) {
         const novoDia = {
-          dia: "TERÇA-FEIRA", // Poderia ser um selecionável
+          dia: "TERÇA-FEIRA", // Poderia ser um selecionável (ver como aprimorar essa parte) 
           data: new Date(Date.now() + 86400000).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).toUpperCase(),
           horarios: []
         };
@@ -162,7 +161,7 @@ function Gerenciamento() {
         const novosHorarios = [
           ...novosDias[diaIndex].horarios,
           {
-            id: Date.now(), // ID único
+            id: Date.now(), // ID único (incluir no banco)
             hora: novaHora,
             paciente: "",
             status: "disponivel"

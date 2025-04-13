@@ -36,30 +36,30 @@ function Principal() {
   // Estatísticas
   const stats = [
     { value: "100+", label: "Profissionais" },
-    { value: "24/7", label: "Disponibilidade" },
+    { value: "10/10", label: "Disponibilidade" },
     { value: "98%", label: "Satisfação" },
     { value: "5.0", label: "Avaliação" }
   ];
 
-  // Imagens para o carrossel com ajustes de posicionamento
+  // Imagens para o carrossel
   const carouselImages = [
     {
       src: EquipeMed,
       alt: "Equipe médica da MedSync",
       caption: "Profissionais altamente qualificados",
-      position: "center 15%" // Ajustado para focar nos rostos
+      position: "center 15%" 
     },
     {
       src: MedPaciente,
       alt: "Atendimento personalizado",
       caption: "Cuidado individualizado para cada paciente",
-      position: "center 10%" // Ajustado para mostrar interação médico-paciente
+      position: "center 10%" 
     },
     {
       src: MedLocal,
       alt: "Instalações modernas",
       caption: "Ambiente equipado com tecnologia de ponta",
-      position: "center center" // Padrão
+      position: "center center" 
     }
   ];
 
@@ -74,11 +74,11 @@ function Principal() {
     setCurrentSlide((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1));
   };
 
-  // Rotação automática do carrossel (5s)
+  // Rotação automática do carrossel (ver se está travando ainda)
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 5000);
+    }, 8000);
     return () => clearInterval(interval);
   }, []);
 

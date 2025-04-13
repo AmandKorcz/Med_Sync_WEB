@@ -10,13 +10,12 @@ function Login() {
         nome: "",
         senha: ""
     });
-    const [erro, setErro] = useState(""); // Estado para mensagens de erro
+    const [erro, setErro] = useState(""); // Mensagens de erro (validação/inicio de teste )
     const navigate = useNavigate();
 
     const handleLogin = (e) => {
-        e.preventDefault(); // Previne recarregamento da página
+        e.preventDefault(); 
         
-        // Validação melhorada
         if (!credenciais.nome.trim()) {
             setErro("Por favor, insira seu nome");
             return;
@@ -27,8 +26,8 @@ function Login() {
             return;
         }
         
-        // Simulação de login bem-sucedido
-        setErro(""); // Limpa erros anteriores
+        // Simulação de login bem-sucedido (enquanto não tem coneção com o banco)
+        setErro(""); 
         navigate('/gerenciamento');
     };
 
@@ -38,7 +37,6 @@ function Login() {
             ...prev,
             [name]: value
         }));
-        // Limpa erro quando o usuário começa a digitar
         if (erro) setErro("");
     };
 

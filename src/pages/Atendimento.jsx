@@ -11,8 +11,6 @@ function Atendimento() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-
-     
     <main className="container mx-auto px-4 py-34 mb-16"> 
         <section className="max-w-6xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
           <div className="md:flex">
@@ -48,7 +46,6 @@ function Atendimento() {
               </h4>
 
               <div className="mb-6">
-                {/* Tabela mais ampla sem scroll horizontal */}
                 <table className="w-full bg-[#03484E] border border-gray-700 rounded-lg">
                   <thead>
                     <tr className="bg-[#007b87]">
@@ -139,8 +136,6 @@ function Atendimento() {
             </div>
           </div>
         </section>
-
-        {/* Seção Dra. Maria Luana - Layout ampliado */}
         <section className="max-w-6xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
           <div className="md:flex">
             <div className="md:w-1/4 relative overflow-hidden group">
@@ -173,7 +168,6 @@ function Atendimento() {
               </h4>
 
               <div className="mb-6">
-                {/* Tabela mais ampla sem scroll horizontal */}
                 <table className="w-full bg-[#03484E] border border-gray-700 rounded-lg">
                   <thead>
                     <tr className="bg-[#007b87]">

@@ -8,8 +8,6 @@ function SobreNos() {
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
-            
-            {/* Hero Section */}
             <section className="relative bg-gradient-to-br from-[#008E9A] to-[#00B4C5] text-white py-20 px-6">
                 <div className="max-w-6xl mx-auto text-center">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
@@ -190,7 +188,7 @@ function SobreNos() {
                         
                         <div className="p-8 rounded-xl bg-[#F8FDFD] hover:shadow-lg transition duration-300">
                             <div className="bg-[#00B4C5] text-white p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                                <span className="text-2xl font-bold">24/7</span>
+                                <span className="text-2xl font-bold">10/10</span>
                             </div>
                             <h3 className="text-xl font-bold text-[#007A87] mb-3">Disponibilidade</h3>
                             <p className="text-gray-600">Agendamento online disponível a qualquer momento</p>
