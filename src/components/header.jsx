@@ -1,6 +1,7 @@
 import { Typography } from "@material-tailwind/react";
 import MedSyncBranco from "../assets/image/MedSyncBranco.png";
 import { useNavigate } from "react-router-dom";
+import Atendimento from "../pages/Atendimento.jsx";
 
 function Header() {
 
@@ -24,9 +25,10 @@ function Header() {
         <nav className="hidden md:flex space-x-8">
           <Typography
             as="a"
-            href="#"
-            className="text-white hover:text-[#A3DDEA] transition-colors"
-          >
+            href="/Atendimento"
+            className="text-white hover:text-[#A3DDEA] transition-colors cursor-pointer"
+            onClick={Atendimento}
+          > 
             Atendimentos
           </Typography>
         </nav>
