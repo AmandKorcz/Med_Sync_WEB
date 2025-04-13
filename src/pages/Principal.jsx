@@ -78,7 +78,7 @@ function Principal() {
         <img 
           src={MedLocal} 
           alt="Logo MedSync" 
-          className="w-64 md:w-80 drop-shadow-lg rounded-lg" 
+          className="w-94 md:w-110 drop-shadow-lg rounded-lg" 
         />
       </div>
       <div className="space-y-6">
