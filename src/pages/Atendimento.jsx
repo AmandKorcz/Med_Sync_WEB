@@ -12,23 +12,24 @@ function Atendimento() {
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <section className="max-w-4xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
+     
+    <main className="container mx-auto px-4 py-34 mb-16"> 
+        <section className="max-w-6xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
           <div className="md:flex">
-            <div className="md:w-1/3 relative overflow-hidden group">
+            <div className="md:w-1/4 relative overflow-hidden group">
               <img
                 src={Med_2}
                 alt="Dra. Eduarda Do Nascimento"
                 className="w-full h-full object-cover transform transition duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                <span className="text-white font-bold text-lg">
+                <span className="text-white font-bold text-xl">
                   Dra. Eduarda
                 </span>
               </div>
             </div>
 
-            <div className="md:w-2/3 p-6 bg-[#086068] backdrop-blur-sm">
+            <div className="md:w-3/4 p-6 bg-[#086068]">
               <div className="mb-4">
                 <span className="text-sm font-semibold text-gray-300">
                   CRM/SC - 26580
@@ -46,117 +47,92 @@ function Atendimento() {
                 Qual a melhor data e hora para seu atendimento?
               </h4>
 
-              <div className="overflow-x-auto mb-6">
-                <table className="min-w-full bg-[#03484E] border border-gray-700 rounded-lg overflow-hidden">
+              <div className="mb-6">
+                {/* Tabela mais ampla sem scroll horizontal */}
+                <table className="w-full bg-[#03484E] border border-gray-700 rounded-lg">
                   <thead>
                     <tr className="bg-[#007b87]">
-                      <th className="py-3 px-4 border-b border-gray-600 text-center text-white">
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
                         Seg 02/Jun
                       </th>
-                      <th className="py-3 px-4 border-b border-gray-600 text-center text-white">
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
                         Ter 03/Jun
                       </th>
-                      <th className="py-3 px-4 border-b border-gray-600 text-center text-white">
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
                         Qua 04/Jun
+                      </th>
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
+                        Qui 05/Jun
+                      </th>
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
+                        Sex 06/Jun
                       </th>
                     </tr>
                   </thead>
                   <tbody>
+                    {/* Linha 1 de horários */}
                     <tr>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Eduarda", "02/Jun", "11:30")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          11:30
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Eduarda", "03/Jun", "09:50")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          09:50
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Eduarda", "04/Jun", "09:30")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          09:30
-                        </button>
-                      </td>
+                      {["11:30", "09:50", "09:30", "10:00", "14:00"].map((horario, index) => (
+                        <td key={index} className="py-3 px-6 border-b border-gray-700 text-center">
+                          <button
+                            onClick={() =>
+                              handleAgendar(
+                                "Dra. Eduarda", 
+                                ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
+                                horario
+                              )
+                            }
+                            className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
+                          >
+                            {horario}
+                          </button>
+                        </td>
+                      ))}
                     </tr>
+                    {/* Linha 2 de horários */}
                     <tr>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Eduarda", "02/Jun", "17:10")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          17:10
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Eduarda", "03/Jun", "14:30")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          14:30
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Eduarda", "04/Jun", "09:50")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          09:50
-                        </button>
-                      </td>
+                      {["17:10", "14:30", "09:50", "11:00", "15:30"].map((horario, index) => (
+                        <td key={index} className="py-3 px-6 border-b border-gray-700 text-center">
+                          <button
+                            onClick={() =>
+                              handleAgendar(
+                                "Dra. Eduarda", 
+                                ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
+                                horario
+                              )
+                            }
+                            className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
+                          >
+                            {horario}
+                          </button>
+                        </td>
+                      ))}
                     </tr>
+                    {/* Linha 3 de horários */}
                     <tr>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Eduarda", "02/Jun", "18:10")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          18:10
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        {/* Célula vazia */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Eduarda", "04/Jun", "10:10")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          10:10
-                        </button>
-                      </td>
+                      {["18:10", "16:00", "10:10", "14:00", "16:30"].map((horario, index) => (
+                        <td key={index} className="py-3 px-6 border-b border-gray-700 text-center">
+                          <button
+                            onClick={() =>
+                              handleAgendar(
+                                "Dra. Eduarda", 
+                                ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
+                                horario
+                              )
+                            }
+                            className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
+                          >
+                            {horario}
+                          </button>
+                        </td>
+                      ))}
                     </tr>
                   </tbody>
                 </table>
               </div>
 
-              <div className="mt-6">
-                <button className="bg-[#008E9A] hover:bg-[#00B4C6] text-white font-bold py-2 px-6 rounded-lg transition duration-200 transform hover:scale-105 shadow-md">
+              <div className="mt-6 text-center">
+                <button className="bg-[#008E9A] hover:bg-[#00B4C6] text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg text-lg">
                   Agendar Horário
                 </button>
               </div>
@@ -164,21 +140,21 @@ function Atendimento() {
           </div>
         </section>
 
-        {/* Seção da Dra. Maria Luana - Estilo Dark com botões claros */}
-        <section className="max-w-4xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
+        {/* Seção Dra. Maria Luana - Layout ampliado */}
+        <section className="max-w-6xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
           <div className="md:flex">
-            <div className="md:w-1/3 relative overflow-hidden group">
+            <div className="md:w-1/4 relative overflow-hidden group">
               <img
                 src={Med_1}
                 alt="Dra. Maria Luana"
                 className="w-full h-full object-cover transform transition duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                <span className="text-white font-bold text-lg">Dra. Maria</span>
+                <span className="text-white font-bold text-xl">Dra. Maria</span>
               </div>
             </div>
 
-            <div className="md:w-2/3 p-6 bg-[#086068] backdrop-blur-sm">
+            <div className="md:w-3/4 p-6 bg-[#086068]">
               <div className="mb-4">
                 <span className="text-sm font-semibold text-gray-300">
                   CRM/SC - 25687
@@ -196,117 +172,92 @@ function Atendimento() {
                 Qual a melhor data e hora para seu atendimento?
               </h4>
 
-              <div className="overflow-x-auto mb-6">
-                <table className="min-w-full  bg-[#03484E] border border-gray-700 rounded-lg overflow-hidden">
+              <div className="mb-6">
+                {/* Tabela mais ampla sem scroll horizontal */}
+                <table className="w-full bg-[#03484E] border border-gray-700 rounded-lg">
                   <thead>
                     <tr className="bg-[#007b87]">
-                      <th className="py-3 px-4 border-b border-gray-600 text-center text-white">
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
                         Seg 02/Jun
                       </th>
-                      <th className="py-3 px-4 border-b border-gray-600 text-center text-white">
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
                         Ter 03/Jun
                       </th>
-                      <th className="py-3 px-4 border-b border-gray-600 text-center text-white">
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
                         Qua 04/Jun
+                      </th>
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
+                        Qui 05/Jun
+                      </th>
+                      <th className="py-3 px-6 border-b border-gray-600 text-center text-white w-1/5">
+                        Sex 06/Jun
                       </th>
                     </tr>
                   </thead>
                   <tbody>
+                    {/* Linha 1 de horários */}
                     <tr>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Maria Luana", "02/Jun", "11:30")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          11:30
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Maria Luana", "03/Jun", "09:50")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          09:50
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Maria Luana", "04/Jun", "09:30")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          09:30
-                        </button>
-                      </td>
+                      {["11:30", "09:50", "09:30", "10:00", "14:00"].map((horario, index) => (
+                        <td key={index} className="py-3 px-6 border-b border-gray-700 text-center">
+                          <button
+                            onClick={() =>
+                              handleAgendar(
+                                "Dra. Maria Luana", 
+                                ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
+                                horario
+                              )
+                            }
+                            className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
+                          >
+                            {horario}
+                          </button>
+                        </td>
+                      ))}
                     </tr>
+                    {/* Linha 2 de horários */}
                     <tr>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Maria Luana", "02/Jun", "17:10")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          17:10
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Maria Luana", "03/Jun", "14:30")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          14:30
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Maria Luana", "04/Jun", "09:50")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          09:50
-                        </button>
-                      </td>
+                      {["17:10", "14:30", "09:50", "11:00", "15:30"].map((horario, index) => (
+                        <td key={index} className="py-3 px-6 border-b border-gray-700 text-center">
+                          <button
+                            onClick={() =>
+                              handleAgendar(
+                                "Dra. Maria Luana", 
+                                ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
+                                horario
+                              )
+                            }
+                            className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
+                          >
+                            {horario}
+                          </button>
+                        </td>
+                      ))}
                     </tr>
+                    {/* Linha 3 de horários */}
                     <tr>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Maria Luana", "02/Jun", "18:10")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          18:10
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        {/* Célula vazia */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-700 text-center">
-                        <button
-                          onClick={() =>
-                            handleAgendar("Dra. Maria Luana", "04/Jun", "10:10")
-                          }
-                          className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
-                        >
-                          10:10
-                        </button>
-                      </td>
+                      {["18:10", "16:00", "10:10", "14:00", "16:30"].map((horario, index) => (
+                        <td key={index} className="py-3 px-6 border-b border-gray-700 text-center">
+                          <button
+                            onClick={() =>
+                              handleAgendar(
+                                "Dra. Maria Luana", 
+                                ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
+                                horario
+                              )
+                            }
+                            className="bg-[#e0f7f9] hover:bg-[#008E9A] hover:text-white text-[#008E9A] font-medium py-2 px-4 rounded-lg transition duration-200 w-full"
+                          >
+                            {horario}
+                          </button>
+                        </td>
+                      ))}
                     </tr>
                   </tbody>
                 </table>
               </div>
 
-              <div className="mt-6">
-                <button className="bg-[#008E9A] hover:bg-[#00B4C6] text-white font-bold py-2 px-6 rounded-lg transition duration-200 transform hover:scale-105 shadow-md">
+              <div className="mt-6 text-center">
+                <button className="bg-[#008E9A] hover:bg-[#00B4C6] text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg text-lg">
                   Agendar Horário
                 </button>
               </div>
