@@ -1,6 +1,5 @@
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
-import Clinica from "../assets/image/Clinica.jpg";
 import Med_1 from "../assets/image/Med_1.jpg";
 import Med_2 from "../assets/image/Med_2.jpg";
 
@@ -14,37 +13,6 @@ function Atendimento() {
       <Header />
 
       <main className="flex-grow container mx-auto px-4 py-8">
-        <section className="mb-12">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="md:w-1/2">
-              <h1 className="text-3xl md:text-4xl font-bold text-[#008E9A] mb-6">
-                Venha conhecer nosso espaço!!
-              </h1>
-
-              <p className="text-lg text-black">
-                Aqui cuidamos da saúde dos pequenos com carinho e dedicação.
-                Nossa equipe especializada em pediatria oferece um atendimento
-                humanizado, em um ambiente acolhedor e seguro. Aqui, cada
-                criança recebe o cuidado que merece para crescer com saúde e
-                bem-estar!
-              </p>
-
-              <button className="bg-[#008E9A] hover:bg-[#007b87] text-white font-bold py-3 px-8 rounded-lg transition duration-200 text-lg transform hover:scale-105 shadow-lg hover:shadow-xl">
-                CONTATO
-              </button>
-            </div>
-            <div className="md:w-1/2 relative group mt-16 mb-16">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#008E9A] to-purple-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
-              <img
-                src={Clinica}
-                alt="Nosso espaço"
-                className="w-full h-auto rounded-lg shadow-xl transform transition duration-500 group-hover:scale-105 relative z-10 border-4 border-white"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Seção da Dra. Eduarda - Estilo Dark com botões claros */}
         <section className="max-w-4xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
           <div className="md:flex">
             <div className="md:w-1/3 relative overflow-hidden group">

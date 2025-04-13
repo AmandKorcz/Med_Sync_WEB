@@ -1,14 +1,12 @@
 import { Typography } from "@material-tailwind/react";
 import MedSyncBranco from "../assets/image/MedSyncBranco.png";
 import { useNavigate } from "react-router-dom";
-import Atendimento from "../pages/Atendimento.jsx";
 
 function Header() {
-
   const navigate = useNavigate();
 
-  const PagePrincipal = () => {
-    navigate("/");
+  const navigateTo = (path) => {
+    navigate(path);
   };
 
   return (
@@ -18,20 +16,29 @@ function Header() {
           <img 
             src={MedSyncBranco} 
             className="h-10 w-auto mr-4 cursor-pointer" 
-            onClick={PagePrincipal}
-            alt="MedSyncBranco"
+            onClick={() => navigateTo("/")}
+            alt="Logo MedSync"
           />
         </div>
-        <nav className="hidden md:flex space-x-8">
+        
+        <div className="hidden md:flex space-x-8">
           <Typography
-            as="a"
-            href="/Atendimento"
-            className="text-white hover:text-[#A3DDEA] transition-colors cursor-pointer"
-            onClick={Atendimento}
+            as="button"
+            className="text-white hover:text-[#A3DDEA] transition-colors cursor-pointer bg-transparent border-none"
+            onClick={() => navigateTo("/atendimento")}
           > 
             Atendimentos
           </Typography>
-        </nav>
+          
+          <Typography
+            as="button"
+            className="text-white hover:text-[#A3DDEA] transition-colors cursor-pointer bg-transparent border-none"
+            onClick={() => navigateTo("/sobre-nos")}
+          > 
+            Sobre Nós
+          </Typography>
+        </div>
+        
         <button className="md:hidden text-white">
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" d="M4 6h16M4 12h16M4 18h16" />
