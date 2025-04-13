@@ -1,5 +1,6 @@
 import { Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import Atendimento from "../pages/Atendimento";
 
 function Footer() {
   return (
@@ -15,8 +16,9 @@ function Footer() {
             <li>
               <Typography
                 as="a"
-                href="#"
+                href="/Atendimento"
                 className="font-normal text-white hover:text-[#A3DDEA] transition-colors"
+                onClick={Atendimento}
               >
                 Atendimentos
               </Typography>
