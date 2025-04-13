@@ -1,7 +1,7 @@
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
-import MedLocal from "../assets/image/MedLocal.jpg" 
 import { FaFileAlt, FaCalendarAlt, FaUsers } from "react-icons/fa";
+import MedLocal from "../assets/image/MedLocal.jpg"; 
 import VidMed from "../assets/image/MedVideo.mp4";
 
 function Principal() {
