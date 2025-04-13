@@ -9,7 +9,7 @@ function Login() {
     return (
         <div className="min-h-screen flex flex-col"> 
             <Header />
-            <main className="flex-grow flex items-center justify-center p-4">
+            <main className="flex-grow flex items-center justify-center p-4 min-h-[calc(100vh-160px)]">
                 <div className="w-full max-w-md mx-auto">
                     <div className="bg-white rounded-lg shadow-md p-8 space-y-6">
                         <div className="text-center">
