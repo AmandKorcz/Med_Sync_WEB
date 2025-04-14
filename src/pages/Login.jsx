@@ -5,39 +5,48 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [credenciais, setCredenciais] = useState({
-        nome: "",
+        email: "",
         senha: ""
     });
     const [erro, setErro] = useState(""); // Mensagens de erro (validação/inicio de teste )
-    const navigate = useNavigate();
-
-    const handleLogin = (e) => {
-        e.preventDefault(); 
-        
-        if (!credenciais.nome.trim()) {
-            setErro("Por favor, insira seu nome");
-            return;
-        }
-        
-        if (!credenciais.senha) {
-            setErro("Por favor, insira sua senha");
-            return;
-        }
-        
-        // Simulação de login bem-sucedido (enquanto não tem coneção com o banco)
-        setErro(""); 
-        navigate('/gerenciamento');
-    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCredenciais(prev => ({
-            ...prev,
+        setCredenciais(prevState => ({
+            ...prevState,
             [name]: value
         }));
-        if (erro) setErro("");
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault(); 
+
+        try{
+            const response = await fetch('http://localhost:3000/login',{
+                method: POST, 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credenciais),
+            });
+
+            const data = await response.json();
+            if(!responde.ok){
+                setErro(data.mensagem || "Erro no login");
+                return;
+            }
+
+            //em caso de login bem-sucedido 
+            console.log("Usuário logado", data.secretaria);
+            setErro('');
+            navigate('/gerenciamento');
+        }catch(error){
+            console.error('Erro na requisição: ', erro);
+            setErro('Erro ao conectar com o servidor');
+        }
     };
 
     return (
@@ -45,7 +54,9 @@ function Login() {
             <Header />
             <main className="flex-grow flex items-center justify-center p-4 min-h-[calc(100vh-160px)]">
                 <div className="w-full max-w-md mx-auto">
-                    <form onSubmit={handleLogin} className="bg-white rounded-lg shadow-md p-8 space-y-6">
+                    <form 
+                        onSubmit={handleLogin} 
+                        className="bg-white rounded-lg shadow-md p-8 space-y-6">
                         <div className="text-center">
                             <h1 className="text-2xl font-bold text-[#49BBBD] mb-2">MedSync</h1>
                             <p className="text-sm text-gray-600 mb-4">CLINICA INFANTIL</p>
@@ -60,13 +71,13 @@ function Login() {
                         
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm mb-1 text-gray-700">Nome</label>
+                                <label className="block text-sm mb-1 text-gray-700">Email</label>
                                 <input
                                     type="text"
-                                    name="nome"
-                                    placeholder="Digite seu nome"
+                                    email="email"
+                                    placeholder="Digite seu email"
                                     className="w-full border border-[#49BBBD] rounded-full px-4 py-2 text-sm outline-none placeholder:text-gray-400"
-                                    value={credenciais.nome}
+                                    value={credenciais.email}
                                     onChange={handleChange}
                                     required
                                 />
