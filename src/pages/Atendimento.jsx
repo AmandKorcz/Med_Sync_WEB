@@ -1,17 +1,45 @@
+import { useState } from "react";
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
 import Med_1 from "../assets/image/Med_1.jpg";
 import Med_2 from "../assets/image/Med_2.jpg";
+import Popup from "../components/Popup.jsx";
 
 function Atendimento() {
+  const [showPopup, setShowPopup] = useState(false);
+  const [agendamentoInfo, setAgendamentoInfo] = useState({
+    medico: '',
+    data: '',
+    horario: ''
+  });
+
   const handleAgendar = (medico, data, horario) => {
-    console.log(`Agendando com ${medico} em ${data} às ${horario}`);
+    setAgendamentoInfo({ medico, data, horario });
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
+  const handleContactClick = () => {
+    setShowPopup(false);
+  };
+
+  const handleAgendarHorario = (medico) => {
+    setAgendamentoInfo({ 
+      medico, 
+      data: 'Data a confirmar', 
+      horario: 'Horário a confirmar' 
+    });
+    setShowPopup(true);
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-    <main className="container mx-auto px-4 py-34 mb-16"> 
+      <main className="container mx-auto px-4 py-34 mb-16">
+        {/* Seção Dra. Eduarda */}
         <section className="max-w-6xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
           <div className="md:flex">
             <div className="md:w-1/4 relative overflow-hidden group">
@@ -74,7 +102,7 @@ function Atendimento() {
                           <button
                             onClick={() =>
                               handleAgendar(
-                                "Dra. Eduarda", 
+                                "Dra. Eduarda Do Nascimento", 
                                 ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
                                 horario
                               )
@@ -93,7 +121,7 @@ function Atendimento() {
                           <button
                             onClick={() =>
                               handleAgendar(
-                                "Dra. Eduarda", 
+                                "Dra. Eduarda Do Nascimento", 
                                 ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
                                 horario
                               )
@@ -112,7 +140,7 @@ function Atendimento() {
                           <button
                             onClick={() =>
                               handleAgendar(
-                                "Dra. Eduarda", 
+                                "Dra. Eduarda Do Nascimento", 
                                 ["02/Jun", "03/Jun", "04/Jun", "05/Jun", "06/Jun"][index], 
                                 horario
                               )
@@ -129,13 +157,18 @@ function Atendimento() {
               </div>
 
               <div className="mt-6 text-center">
-                <button className="bg-[#008E9A] hover:bg-[#00B4C6] text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg text-lg">
+                <button 
+                  onClick={() => handleAgendarHorario("Dra. Eduarda Do Nascimento")}
+                  className="bg-[#008E9A] hover:bg-[#00B4C6] text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg text-lg"
+                >
                   Agendar Horário
                 </button>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Seção Dra. Maria Luana */}
         <section className="max-w-6xl mx-auto bg-gradient-to-r from-[#00565e] to-[#008E9A] rounded-lg shadow-xl overflow-hidden mb-12">
           <div className="md:flex">
             <div className="md:w-1/4 relative overflow-hidden group">
@@ -251,7 +284,10 @@ function Atendimento() {
               </div>
 
               <div className="mt-6 text-center">
-                <button className="bg-[#008E9A] hover:bg-[#00B4C6] text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg text-lg">
+                <button 
+                  onClick={() => handleAgendarHorario("Dra. Maria Luana")}
+                  className="bg-[#008E9A] hover:bg-[#00B4C6] text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg text-lg"
+                >
                   Agendar Horário
                 </button>
               </div>
@@ -261,6 +297,17 @@ function Atendimento() {
       </main>
 
       <Footer />
+
+      {/* Popup de Agendamento */}
+      {showPopup && (
+        <Popup 
+          medico={agendamentoInfo.medico}
+          data={agendamentoInfo.data}
+          horario={agendamentoInfo.horario}
+          onClose={handleClosePopup}
+          onContact={handleContactClick}
+        />
+      )}
     </div>
   );
 }
