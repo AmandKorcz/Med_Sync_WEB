@@ -1,205 +1,158 @@
 import Header from "../components/header";
 import Footer from "../components/footer";
-import Clinica from "../assets/image/Clinica.jpg";
-import MedLocal from "../assets/image/MedLocal.jpg";
-import { FaCalendarAlt, FaUserClock, FaShieldAlt, FaUserMd, FaChild, FaPhoneAlt, FaMapMarkerAlt, FaClock } from "react-icons/fa";
+import MedLocal from "../assets/image/MedLocal.jpg"
+import { FaCalendarAlt, FaUserClock, FaShieldAlt, FaUserMd, FaHeartbeat, FaClinicMedical, FaWhatsapp } from "react-icons/fa";
 
 function SobreNos() {
+    // Dados de contato centralizados
+    const phoneNumber = "5547984747598";
+    const whatsappLink = `https://wa.me/${phoneNumber}`;
+    const whatsappMessage = encodeURIComponent("Olá, gostaria de mais informações sobre a MedSync!");
+
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
-            <section className="relative bg-gradient-to-br from-[#008E9A] to-[#00B4C5] text-white py-20 px-6">
-                <div className="max-w-6xl mx-auto text-center">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
-                        Conheça a <span className="text-[#DFF3F4]">MedSync</span>
+            
+            {/* Hero Section */}
+            <section className="relative bg-gradient-to-br from-[#008E9A] to-[#00B4C5] text-white py-28 px-6 overflow-hidden">
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==')]"></div>
+                </div>
+                <div className="max-w-6xl mx-auto text-center relative z-10">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">
+                        Conectando <span className="text-[#DFF3F4]">saúde</span> e <span className="text-[#DFF3F4]">tecnologia</span>
                     </h1>
                     <p className="text-xl md:text-2xl max-w-3xl mx-auto mb-8 leading-relaxed">
-                        Revolucionando a forma como pacientes e médicos se conectam
+                        A MedSync reinventa a experiência em saúde com agendamentos simples e atendimento humanizado
                     </p>
-                    <div className="flex justify-center gap-4">
+                    <div className="flex flex-col sm:flex-row justify-center gap-4">
                         <button className="bg-white text-[#008E9A] hover:bg-[#DFF3F4] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg">
                             Agendar Consulta
                         </button>
-                        <button className="border-2 border-white text-white hover:bg-white hover:text-[#008E9A] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105">
-                            Fale Conosco
-                        </button>
+                        <a 
+                            href={`${whatsappLink}?text=${whatsappMessage}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="border-2 border-white text-white hover:bg-white hover:text-[#008E9A] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2"
+                        >
+                            <FaWhatsapp /> Fale Conosco
+                        </a>
                     </div>
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-50 to-transparent"></div>
             </section>
 
-            {/* Seção "Quem somos?" */}
-            <section className="py-16 px-6 md:px-20 bg-white">
+            {/* Sobre Nós - Versão Redesign */}
+            <section className="py-20 px-6 bg-white">
                 <div className="max-w-6xl mx-auto">
-                    <div className="flex flex-col lg:flex-row items-center gap-12">
-                        <div className="lg:w-1/2 relative group">
-                            <div className="absolute -inset-4 bg-gradient-to-r from-[#00B4C5] to-[#008E9A] rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
-                            <img 
-                                src={MedLocal} 
-                                alt="Equipe MedSync" 
-                                className="w-full h-auto rounded-xl shadow-2xl transform transition duration-500 group-hover:scale-102 relative z-10 border-4 border-white" 
-                            />
+                    <div className="text-center mb-16">
+                        <span className="inline-block bg-[#DFF3F4] text-[#008E9A] px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                            SOBRE NÓS
+                        </span>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                            Quem somos?
+                        </h2>
+                        <div className="max-w-2xl mx-auto">
+                            <p className="text-lg text-gray-600 leading-relaxed">
+                                A <strong className="text-[#008E9A]">MedSync</strong> é uma plataforma inovadora que conecta pacientes e profissionais de saúde de forma simples, segura e eficiente. Nossa missão é democratizar o acesso à saúde de qualidade através da tecnologia.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Diferenciais em Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div className="bg-[#F8FDFD] p-8 rounded-2xl text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-[#DFF3F4]">
+                            <div className="bg-[#00B4C5] p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 text-white">
+                                <FaCalendarAlt size={28} />
+                            </div>
+                            <h3 className="text-xl font-bold text-[#007A87] mb-3">Agendamento Rápido</h3>
+                            <p className="text-gray-600">Marque consultas em poucos cliques, 24 horas por dia, sem complicações.</p>
                         </div>
                         
-                        <div className="lg:w-1/2 space-y-8">
-                            <div className="inline-block bg-[#DFF3F4] text-[#008E9A] px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                                SOBRE NÓS
+                        <div className="bg-[#F8FDFD] p-8 rounded-2xl text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-[#DFF3F4]">
+                            <div className="bg-[#00B4C5] p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 text-white">
+                                <FaUserClock size={28} />
                             </div>
-                            
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#008E9A]">
-                                Quem somos?
-                            </h2>
-                            
-                            <p className="text-gray-700 text-lg leading-relaxed">
-                                <strong className="text-[#007A87] font-bold">MedSync</strong> é uma plataforma inovadora de agendamento
-                                de consultas médicas, desenvolvida para conectar pacientes e profissionais 
-                                da saúde com eficiência e comodidade.
-                            </p>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="bg-[#F8FDFD] p-6 rounded-xl border border-[#DFF3F4] hover:border-[#00B4C5] transition duration-300">
-                                    <div className="flex items-center gap-4 mb-3">
-                                        <div className="bg-[#00B4C5] p-3 rounded-full text-white">
-                                            <FaCalendarAlt size={20} />
-                                        </div>
-                                        <h3 className="font-bold text-[#007A87]">Agendamento Rápido</h3>
-                                    </div>
-                                    <p className="text-gray-600">Marque consultas em poucos cliques, 24 horas por dia.</p>
-                                </div>
-                                
-                                <div className="bg-[#F8FDFD] p-6 rounded-xl border border-[#DFF3F4] hover:border-[#00B4C5] transition duration-300">
-                                    <div className="flex items-center gap-4 mb-3">
-                                        <div className="bg-[#00B4C5] p-3 rounded-full text-white">
-                                            <FaUserClock size={20} />
-                                        </div>
-                                        <h3 className="font-bold text-[#007A87]">Gestão de Horários</h3>
-                                    </div>
-                                    <p className="text-gray-600">Médicos controlam sua agenda com facilidade.</p>
-                                </div>
-                                
-                                <div className="bg-[#F8FDFD] p-6 rounded-xl border border-[#DFF3F4] hover:border-[#00B4C5] transition duration-300">
-                                    <div className="flex items-center gap-4 mb-3">
-                                        <div className="bg-[#00B4C5] p-3 rounded-full text-white">
-                                            <FaShieldAlt size={20} />
-                                        </div>
-                                        <h3 className="font-bold text-[#007A87]">Segurança Total</h3>
-                                    </div>
-                                    <p className="text-gray-600">Seus dados protegidos com criptografia avançada.</p>
-                                </div>
-                                
-                                <div className="bg-[#F8FDFD] p-6 rounded-xl border border-[#DFF3F4] hover:border-[#00B4C5] transition duration-300">
-                                    <div className="flex items-center gap-4 mb-3">
-                                        <div className="bg-[#00B4C5] p-3 rounded-full text-white">
-                                            <FaUserMd size={20} />
-                                        </div>
-                                        <h3 className="font-bold text-[#007A87]">Experiência Simplificada</h3>
-                                    </div>
-                                    <p className="text-gray-600">Interface intuitiva para médicos e pacientes.</p>
-                                </div>
+                            <h3 className="text-xl font-bold text-[#007A87] mb-3">Gestão Inteligente</h3>
+                            <p className="text-gray-600">Médicos controlam sua agenda com ferramentas poderosas e intuitivas.</p>
+                        </div>
+                        
+                        <div className="bg-[#F8FDFD] p-8 rounded-2xl text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-[#DFF3F4]">
+                            <div className="bg-[#00B4C5] p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 text-white">
+                                <FaShieldAlt size={28} />
                             </div>
+                            <h3 className="text-xl font-bold text-[#007A87] mb-3">Segurança Total</h3>
+                            <p className="text-gray-600">Seus dados protegidos com os mais avançados protocolos de criptografia.</p>
+                        </div>
+                        
+                        <div className="bg-[#F8FDFD] p-8 rounded-2xl text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-[#DFF3F4]">
+                            <div className="bg-[#00B4C5] p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 text-white">
+                                <FaUserMd size={28} />
+                            </div>
+                            <h3 className="text-xl font-bold text-[#007A87] mb-3">Experiência Completa</h3>
+                            <p className="text-gray-600">Interface intuitiva projetada para médicos e pacientes.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Seção do Espaço Físico */}
-            <section className="py-16 px-6 md:px-20 bg-gradient-to-br from-[#F8FDFD] to-[#E6F7F8]">
+            {/* Nossa Missão com Card de Imagem */}
+            <section className="py-20 px-6 bg-gradient-to-br from-[#F8FDFD] to-[#E6F7F8]">
                 <div className="max-w-6xl mx-auto">
-                    <div className="flex flex-col lg:flex-row-reverse items-center gap-12">
-                        <div className="lg:w-1/2 space-y-8">
-                            <div className="inline-block bg-[#008E9A] text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                                NOSSO ESPAÇO
-                            </div>
-                            
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#008E9A]">
-                                Venha conhecer nosso espaço!
-                            </h2>
-                            
-                            <p className="text-gray-700 text-lg leading-relaxed">
-                                Na MedSync, cuidamos da saúde com carinho e dedicação. Nossa equipe 
-                                especializada oferece um atendimento humanizado, em um ambiente 
-                                acolhedor e seguro.
-                            </p>
-                            
-                            <div className="space-y-4">
-                                <div className="flex items-start gap-4">
-                                    <div className="text-[#00B4C5] mt-1">
-                                        <FaChild size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-[#007A87]">Pediatria Especializada</h4>
-                                        <p className="text-gray-600">Cuidados específicos para cada fase do desenvolvimento infantil.</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex items-start gap-4">
-                                    <div className="text-[#00B4C5] mt-1">
-                                        <FaMapMarkerAlt size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-[#007A87]">Localização Privilegiada</h4>
-                                        <p className="text-gray-600">Facilidade de acesso e estacionamento amplo.</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex items-start gap-4">
-                                    <div className="text-[#00B4C5] mt-1">
-                                        <FaClock size={20} />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-[#007A87]">Horário Flexível</h4>
-                                        <p className="text-gray-600">Atendimento em horários estendidos para sua comodidade.</p>
+                    <div className="flex flex-col lg:flex-row items-stretch gap-8"> {/* Alterado para items-stretch */}
+                        {/* Card com Imagem */}
+                        <div className="lg:w-1/2">
+                            <div className="h-full overflow-hidden rounded-2xl shadow-xl">
+                                <div className="relative h-full group">
+                                    <img 
+                                        src={MedLocal} 
+                                        alt="Estrutura da Clínica MedSync" 
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                        style={{ minHeight: '400px' }}
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-white mb-2">Nossa Estrutura</h3>
+                                            <p className="text-white/90">Ambiente moderno e acolhedor para seu conforto</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <button className="bg-[#008E9A] hover:bg-[#007A87] text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2">
-                                <FaPhoneAlt /> Fale Conosco
-                            </button>
                         </div>
                         
-                        <div className="lg:w-1/2 relative group">
-                            <div className="absolute -inset-4 bg-gradient-to-r from-[#00B4C5] to-[#008E9A] rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
-                            <img
-                                src={Clinica}
-                                alt="Nosso espaço"
-                                className="w-full h-auto rounded-xl shadow-2xl transform transition duration-500 group-hover:scale-102 relative z-10 border-4 border-white"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Seção de Destaques */}
-            <section className="py-16 px-6 md:px-20 bg-white">
-                <div className="max-w-6xl mx-auto text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold text-[#008E9A] mb-12">
-                        Por que escolher a MedSync?
-                    </h2>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="p-8 rounded-xl bg-[#F8FDFD] hover:shadow-lg transition duration-300">
-                            <div className="bg-[#00B4C5] text-white p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                                <span className="text-2xl font-bold">100+</span>
+                        {/* Conteúdo Textual */}
+                        <div className="lg:w-1/2 flex flex-col">
+                            <div className="bg-white p-8 md:p-12 rounded-2xl shadow-lg h-full flex flex-col justify-center">
+                                <span className="inline-block bg-[#008E9A] text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                                    NOSSA MISSÃO
+                                </span>
+                                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                                    Saúde acessível para todos
+                                </h2>
+                                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                                    Acreditamos que o cuidado com a saúde deve ser simples, humano e acessível. Por isso, desenvolvemos uma plataforma que elimina barreiras e conecta quem precisa de atendimento com os melhores profissionais.
+                                </p>
+                                <div className="space-y-6">
+                                    <div className="flex items-start gap-4">
+                                        <div className="text-[#00B4C5] mt-1">
+                                            <FaHeartbeat size={24} />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-[#007A87] text-lg">Atendimento Humanizado</h4>
+                                            <p className="text-gray-600">Priorizamos o relacionamento médico-paciente em cada interação.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="flex items-start gap-4">
+                                        <div className="text-[#00B4C5] mt-1">
+                                            <FaClinicMedical size={24} />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-[#007A87] text-lg">Tecnologia que Cura</h4>
+                                            <p className="text-gray-600">Ferramentas inovadoras para melhorar sua experiência em saúde.</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 className="text-xl font-bold text-[#007A87] mb-3">Profissionais</h3>
-                            <p className="text-gray-600">Especialistas em diversas áreas da saúde à sua disposição</p>
-                        </div>
-                        
-                        <div className="p-8 rounded-xl bg-[#F8FDFD] hover:shadow-lg transition duration-300">
-                            <div className="bg-[#00B4C5] text-white p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                                <span className="text-2xl font-bold">10/10</span>
-                            </div>
-                            <h3 className="text-xl font-bold text-[#007A87] mb-3">Disponibilidade</h3>
-                            <p className="text-gray-600">Agendamento online disponível a qualquer momento</p>
-                        </div>
-                        
-                        <div className="p-8 rounded-xl bg-[#F8FDFD] hover:shadow-lg transition duration-300">
-                            <div className="bg-[#00B4C5] text-white p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                                <span className="text-2xl font-bold">5.0</span>
-                            </div>
-                            <h3 className="text-xl font-bold text-[#007A87] mb-3">Avaliação</h3>
-                            <p className="text-gray-600">Média de satisfação dos nossos pacientes</p>
                         </div>
                     </div>
                 </div>
