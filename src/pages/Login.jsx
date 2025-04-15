@@ -12,6 +12,7 @@ function Login() {
         senha: ""
     });
     const [erro, setErro] = useState(""); // Mensagens de erro (validação/inicio de teste )
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,16 +27,17 @@ function Login() {
 
         try{
             const response = await fetch('http://localhost:3000/login',{
-                method: POST, 
+                method: "POST", 
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(credenciais),
             });
 
-            const data = await response.json();
-            if(!responde.ok){
-                setErro(data.mensagem || "Erro no login");
+            const data = await response.json().catch(() => null);
+
+            if(!response.ok){
+                setErro(data?.mensagem || "Erro no login");
                 return;
             }
 
@@ -46,6 +48,8 @@ function Login() {
         }catch(error){
             console.error('Erro na requisição: ', erro);
             setErro('Erro ao conectar com o servidor');
+        }finally{
+            setLoading(false);
         }
     };
 
@@ -74,7 +78,7 @@ function Login() {
                                 <label className="block text-sm mb-1 text-gray-700">Email</label>
                                 <input
                                     type="text"
-                                    email="email"
+                                    name="email"
                                     placeholder="Digite seu email"
                                     className="w-full border border-[#49BBBD] rounded-full px-4 py-2 text-sm outline-none placeholder:text-gray-400"
                                     value={credenciais.email}

@@ -5,6 +5,9 @@ const database = mysql.createPool({
     user: 'root',
     password: 'amanda',
     database: 'medsync',
+    waitForConnections: true, 
+    connectionLimit: 10, 
+    queueLimit: 0,
 });
 
 export default database;
