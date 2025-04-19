@@ -53,7 +53,7 @@ function Gerenciamento() {
     }
   ]);
 
-  // Estados para CRUD
+  // CRUD
   const [showPopup, setShowPopup] = useState(false);
   const [currentMedico, setCurrentMedico] = useState(null);
   const [currentDiaIndex, setCurrentDiaIndex] = useState(null);
@@ -278,8 +278,6 @@ function Gerenciamento() {
               </button>
             </div>
           </div>
-          
-          {/* Formulário de Médico (Create/Update) */}
           {mostrarFormMedico && (
             <div className="mb-8 bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold text-[#00565e] mb-4">
@@ -359,8 +357,6 @@ function Gerenciamento() {
               </div>
             </div>
           )}
-          
-          {/* Listagem de Médicos e Horários (Read) */}
           <div className="space-y-8">
             {medicosFiltrados.map(medico => (
               <div key={medico.id} className="bg-white rounded-lg shadow-md overflow-hidden">

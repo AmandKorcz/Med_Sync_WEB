@@ -1,10 +1,9 @@
 import Header from "../components/header";
 import Footer from "../components/footer";
-import MedLocal from "../assets/image/MedLocal.jpg"
+import Clinica from "../assets/image/Clinica.jpg" 
 import { FaCalendarAlt, FaUserClock, FaShieldAlt, FaUserMd, FaHeartbeat, FaClinicMedical, FaWhatsapp } from "react-icons/fa";
 
 function SobreNos() {
-    // Dados de contato centralizados
     const phoneNumber = "5547984747598";
     const whatsappLink = `https://wa.me/${phoneNumber}`;
     const whatsappMessage = encodeURIComponent("Olá, gostaria de mais informações sobre a MedSync!");
@@ -12,8 +11,6 @@ function SobreNos() {
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
-            
-            {/* Hero Section */}
             <section className="relative bg-gradient-to-br from-[#008E9A] to-[#00B4C5] text-white py-28 px-6 overflow-hidden">
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==')]"></div>
@@ -40,8 +37,6 @@ function SobreNos() {
                     </div>
                 </div>
             </section>
-
-            {/* Sobre Nós - Versão Redesign */}
             <section className="py-20 px-6 bg-white">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
@@ -57,8 +52,6 @@ function SobreNos() {
                             </p>
                         </div>
                     </div>
-
-                    {/* Diferenciais em Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         <div className="bg-[#F8FDFD] p-8 rounded-2xl text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-[#DFF3F4]">
                             <div className="bg-[#00B4C5] p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 text-white">
@@ -94,17 +87,14 @@ function SobreNos() {
                     </div>
                 </div>
             </section>
-
-            {/* Nossa Missão com Card de Imagem */}
             <section className="py-20 px-6 bg-gradient-to-br from-[#F8FDFD] to-[#E6F7F8]">
                 <div className="max-w-6xl mx-auto">
-                    <div className="flex flex-col lg:flex-row items-stretch gap-8"> {/* Alterado para items-stretch */}
-                        {/* Card com Imagem */}
+                    <div className="flex flex-col lg:flex-row items-stretch gap-8"> 
                         <div className="lg:w-1/2">
                             <div className="h-full overflow-hidden rounded-2xl shadow-xl">
                                 <div className="relative h-full group">
                                     <img 
-                                        src={MedLocal} 
+                                        src={Clinica} 
                                         alt="Estrutura da Clínica MedSync" 
                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                         style={{ minHeight: '400px' }}
@@ -118,8 +108,6 @@ function SobreNos() {
                                 </div>
                             </div>
                         </div>
-                        
-                        {/* Conteúdo Textual */}
                         <div className="lg:w-1/2 flex flex-col">
                             <div className="bg-white p-8 md:p-12 rounded-2xl shadow-lg h-full flex flex-col justify-center">
                                 <span className="inline-block bg-[#008E9A] text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
