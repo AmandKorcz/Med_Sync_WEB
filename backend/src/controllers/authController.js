@@ -1,4 +1,6 @@
-import jwt from 'jsonwebtoken'; 
+import jwt from 'jsonwebtoken';
+import database from '../database.js';
+import bcrypt from 'bcrypt';
 
 export const login = async (email, senha) => {
     try {
@@ -8,27 +10,24 @@ export const login = async (email, senha) => {
         );
 
         if (rows.length === 0) {
-            return { success: false, message: 'Credenciais inválidas' }; 
+            return { success: false, message: 'Credenciais inválidas' };
         }
 
         const usuario = rows[0];
         const senhaValida = await bcrypt.compare(senha, usuario.senha_hash);
         
         if (!senhaValida) {
-            return { success: false, message: 'Credenciais inválidas' }; 
+            return { success: false, message: 'Credenciais inválidas' };
         }
 
         const token = jwt.sign(
-            {
-                id: usuario.id,
-                email: usuario.email
-            },
+            { id: usuario.id, email: usuario.email },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN || '8h' }
         );
 
         return {
-            success: true, 
+            success: true,
             token,
             usuario: {
                 id: usuario.id,
@@ -41,4 +40,8 @@ export const login = async (email, senha) => {
         console.error('Erro no login:', error);
         throw new Error('Falha no processo de autenticação');
     }
+};
+
+export const verificarToken = (token) => {
+    return jwt.verify(token, process.env.JWT_SECRET);
 };

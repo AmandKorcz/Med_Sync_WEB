@@ -1,38 +1,13 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../database.js';
+import express from 'express';
+import { autenticar } from '../middleware/authMiddleware.js';
 
-const Medico = sequelize.define('Medico', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  crm: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  uf: {
-    type: DataTypes.STRING(2),
-    allowNull: false
-  },
-  especializacao: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  foto_perfil: {
-    type: DataTypes.STRING 
-  },
-  notas: {
-    type: DataTypes.TEXT
-  }
-}, {
-  tableName: 'medicos',
-  timestamps: true
+const router = express.Router();
+
+router.use(autenticar); // Todas as rotas abaixo requerem autenticação
+
+// Exemplo de rota
+router.get('/', (req, res) => {
+    res.json({ message: 'Lista de médicos' });
 });
 
-export default Medico;
+export default router;
