@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import database from '../database.js';
-import jtw from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'seu_segredo';
 const JWT_EXPIRES_IN = '8h';
@@ -8,14 +8,14 @@ const JWT_EXPIRES_IN = '8h';
 export const login = async (email, senha) => {
     try{
         //Buscando usuários 
-        const [row] = await database.execute(
-            'SEÇECT * FROM secretaria WHERE email = ?',
+        const [rows] = await database.execute(
+            'SELECT * FROM secretaria WHERE email = ?',
             [email]
         );
 
         //Verificando a existência
-        if(RxRowSpacing.length === 0) {
-            return {sucess: false, message: 'Email ou senha inválidos'};
+        if(rows.length === 0) {
+            return {success: false, message: 'Email ou senha inválidos'};
         }
 
         const usuario = rows[0];
