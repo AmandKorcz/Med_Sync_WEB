@@ -68,10 +68,10 @@ function Principal() {
   ];
 
   const stats = [
-    { value: "100+", label: "Profissionais" },
-    { value: "10/10", label: "Disponibilidade" },
-    { value: "98%", label: "Satisfação" },
-    { value: "5.0", label: "Avaliação" }
+    { value: "100", suffix: "+", label: "Profissionais" },
+    { value: "10", suffix: "/10", label: "Disponibilidade" },
+    { value: "98", suffix: "%", label: "Satisfação" },
+    { value: "5.0", suffix:"", label: "Avaliação" }
   ];
 
   const carouselImages = [
