@@ -251,36 +251,12 @@ function Principal() {
       <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {stats.map((stat, index) => {
-              const [ref, inView] = useInView({
-                triggerOnce: true,
-                threshold: 0.3,
-              });
-
-              return (
-                <div 
-                  key={index} 
-                  ref={ref} 
-                  className="p-6"
-                >
-                  {inView ? (
-                    <CountUp
-                      end={stat.value}
-                      suffix={stat.suffix}
-                      duration={2.5}
-                      delay={index * 0.2}
-                      decimals={stat.value % 1 === 0 ? 0 : 1}
-                      className="text-4xl font-bold text-[#008E9A] mb-2"
-                    />
-                  ) : (
-                    <div className="text-4xl font-bold text-[#008E9A] mb-2">0</div>
-                  )}
-                  <div className="text-gray-600 uppercase text-sm font-semibold tracking-wider">
-                    {stat.label}
-                  </div>
-                </div>
-              );
-            })}
+            {stats.map((stat, index) => (
+              <div key={index} className="p-6">
+                <div className="text-4xl font-bold text-[#008E9A] mb-2">{stat.value}</div>
+                <div className="text-gray-600 uppercase text-sm font-semibold tracking-wider">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
