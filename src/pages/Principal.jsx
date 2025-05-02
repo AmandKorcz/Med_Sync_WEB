@@ -8,6 +8,8 @@ import VidMed from "../assets/image/MedVideo.mp4";
 import EquipeMed from "../assets/image/EquipeMed.jpg";
 import MedPaciente from "../assets/image/MedPaciente.jpg";
 import MedLocal from "../assets/image/MedLocal.jpg";
+import CountUp from 'react-countup';
+import { useInView } from 'react-intersection-observer';
 
 const ImageWithFallback = ({ src, alt, className, style }) => {
   const [imgSrc, setImgSrc] = useState(src);
@@ -27,7 +29,6 @@ const ImageWithFallback = ({ src, alt, className, style }) => {
     />
   );
 };
-
 
 ImageWithFallback.propTypes = {
   src: PropTypes.string.isRequired,
@@ -67,11 +68,12 @@ function Principal() {
     }
   ];
 
+  // Dados das estatísticas (agora com valores numéricos para animação)
   const stats = [
-    { value: "100", suffix: "+", label: "Profissionais" },
-    { value: "10", suffix: "/10", label: "Disponibilidade" },
-    { value: "98", suffix: "%", label: "Satisfação" },
-    { value: "5.0", suffix:"", label: "Avaliação" }
+    { value: 100, suffix: "+", label: "Profissionais" },
+    { value: 10, suffix: "/10", label: "Disponibilidade" },
+    { value: 98, suffix: "%", label: "Satisfação" },
+    { value: 5.0, suffix: "", label: "Avaliação" }
   ];
 
   const carouselImages = [
@@ -247,16 +249,40 @@ function Principal() {
         </div>
       </section>
       
-      {/* Estatísticas */}
+      {/* Estatísticas (Versão Animada) */}
       <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {stats.map((stat, index) => (
-              <div key={index} className="p-6">
-                <div className="text-4xl font-bold text-[#008E9A] mb-2">{stat.value}</div>
-                <div className="text-gray-600 uppercase text-sm font-semibold tracking-wider">{stat.label}</div>
-              </div>
-            ))}
+            {stats.map((stat, index) => {
+              const [ref, inView] = useInView({
+                triggerOnce: true,
+                threshold: 0.3,
+              });
+
+              return (
+                <div 
+                  key={index} 
+                  ref={ref} 
+                  className="p-6"
+                >
+                  {inView ? (
+                    <CountUp
+                      end={stat.value}
+                      suffix={stat.suffix}
+                      duration={2.5}
+                      delay={index * 0.2}
+                      decimals={stat.value % 1 === 0 ? 0 : 1}
+                      className="text-4xl font-bold text-[#008E9A] mb-2"
+                    />
+                  ) : (
+                    <div className="text-4xl font-bold text-[#008E9A] mb-2">0</div>
+                  )}
+                  <div className="text-gray-600 uppercase text-sm font-semibold tracking-wider">
+                    {stat.label}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
