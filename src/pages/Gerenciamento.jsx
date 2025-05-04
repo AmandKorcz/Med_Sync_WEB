@@ -1,57 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
 import PopupHorario from "../components/PopupHorario.jsx";
 
 function Gerenciamento() {
-  const [medicos, setMedicos] = useState([
-    {
-      id: 1,
-      crm: "26580-SC",
-      nome: "Dra. Eduarda Do Nascimento",
-      especializacao: "Dermatologista",
-      diasAtendimento: [
-        {
-          dia: "SEGUNDA-FEIRA",
-          data: "02/JUNHO",
-          horarios: [
-            { id: 1, hora: "11:30", paciente: "", status: "disponivel" },
-            { id: 2, hora: "17:10", paciente: "", status: "disponivel" },
-            { id: 3, hora: "18:10", paciente: "", status: "disponivel" },
-            { id: 4, hora: "19:10", paciente: "Luiza Helena De Souza", status: "agendado" }
-          ]
-        },
-        {
-          dia: "TERÇA-FEIRA",
-          data: "03/JUNHO",
-          horarios: [
-            { id: 5, hora: "09:00", paciente: "", status: "disponivel" },
-            { id: 6, hora: "14:00", paciente: "Carlos Silva", status: "agendado" }
-          ]
-        }
-      ],
-      notas: "Atendimento às segundas e terças"
-    },
-    {
-      id: 2,
-      crm: "20258-SC",
-      nome: "Dra. Maria Antonieli",
-      especializacao: "Pediatra",
-      diasAtendimento: [
-        {
-          dia: "SEGUNDA-FEIRA",
-          data: "02/JUNHO",
-          horarios: [
-            { id: 7, hora: "11:30", paciente: "", status: "disponivel" },
-            { id: 8, hora: "17:10", paciente: "", status: "disponivel" },
-            { id: 9, hora: "18:10", paciente: "", status: "disponivel" },
-            { id: 10, hora: "19:10", paciente: "Gustavo Korczagin", status: "agendado" }
-          ]
-        }
-      ],
-      notas: "Especialista em pediatria geral"
-    }
-  ]);
+  const [medicos, setMedicos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Estados para CRUD
   const [showPopup, setShowPopup] = useState(false);
@@ -67,7 +22,7 @@ function Gerenciamento() {
     especializacao: "",
     notas: ""
   });
-  const [erros, setErros] = useState({
+  const [errors, setErrors] = useState({
     nome: "",
     crm: "",
     especializacao: ""
@@ -76,8 +31,37 @@ function Gerenciamento() {
   // busca/filtro
   const [filtro, setFiltro] = useState("");
 
+  //Carregando médicos do backend
+  useEffect(() => {
+    const fetchMedicos = async () => {
+      try{
+        const response = await fetch('http://localhost:3000/medico');
+        if (!response.ok){
+          throw new Error('Erro ao carregar médicos');
+        }
+        const data = await response.json();
+        //Adiciona diasAtendimento vazio para cada médico 
+        const medicosComDias = data.map(medico => ({
+          ...medico,
+          diasAtendimento: [{
+            dia: "SEGUNDA-FEIRA",
+            data: new Date().toLocaleDateString('pt-BR', {day: '2-digit', month: 'short'}).toUpperCase(),
+            horarios: []
+          }]
+        }));
+        setMedicos(medicosComDias);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMedicos();
+  }, []);
+
   // CRUD para Médicos
-  const handleAddMedico = () => {
+  const handleAddMedico = async () => {
     const novosErros = {};
     let valido = true;
 
@@ -96,31 +80,46 @@ function Gerenciamento() {
       valido = false;
     }
 
-    setErros(novosErros);
+    setErrors(novosErrors);
 
     if (valido) {
-      const novoMedicoCompleto = {
-        id: editandoMedico ? editandoMedico.id : medicos.length + 1,
-        crm: formMedico.crm,
-        nome: formMedico.nome,
-        especializacao: formMedico.especializacao,
-        diasAtendimento: editandoMedico ? editandoMedico.diasAtendimento : [{
-          dia: "SEGUNDA-FEIRA",
-          data: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).toUpperCase(),
-          horarios: []
-        }],
-        notas: formMedico.notas
-      };
+      try{
+        const method = editandoMedico ? 'PUT' : 'POST';
+        const url = editandoMedico
+          ? `http://localhost:3000/medico/${editandoMedico.id}`
+          : 'http://localhost:3000/medico';
 
-      if (editandoMedico) {
-        setMedicos(medicos.map(m => m.id === editandoMedico.id ? novoMedicoCompleto : m));
-      } else {
-        setMedicos([...medicos, novoMedicoCompleto]);
+          const response = await fetch(url, {
+            method, 
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formMedico)
+          });
+
+          if(!response.ok){
+            throw new Error(editandoMedico ? 'Erro ao atualizar médico':'Erro ao cadastrar médico');
+          }
+
+          //Recarrega a lista de médicos depois das operações 
+          const responseMedico = await fetch('http://localhost:3000/medico');
+          const data = await responseMedico.json();
+          const medicosComDias = data.map(medico => ({
+            ...medico,
+            diasAtendimento: [{
+              dia: "SEUNDA-FEIRA",
+              data: new Date().toLocaleDateString('pt-BR', {day: '2-digit', month: 'short'}).toUpperCase(),
+              horarios: []
+            }]
+          }));
+          setMedicos(medicosComDias);
+
+          setFormMedico({nome: "", crm: "", especializacao: ""});
+          setEditandoMedico(null),
+          setMostrarFormMedico(false)
+      } catch (err) {
+        setError(err.message);
       }
-
-      setFormMedico({ nome: "", crm: "", especializacao: "", notas: "" });
-      setEditandoMedico(null);
-      setMostrarFormMedico(false);
     }
   };
 
@@ -135,8 +134,21 @@ function Gerenciamento() {
     setMostrarFormMedico(true);
   };
 
-  const handleDeleteMedico = (medicoId) => {
-    setMedicos(medicos.filter(medico => medico.id !== medicoId));
+  const handleDeleteMedico = async (medicoId) => {
+    try{
+      const response = await fetch(`http://localhost:3000/medico/${medicoId}`, {
+        method: 'DELETE'
+      });
+
+      if(!response.ok){
+        throw new Error('Erro ao remover médico');
+      }
+
+      //Atualiza a lista de médicos após a remoção
+      setMedicos(medicos.filter(medico => medico.id !== medicoId));
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   // CRUD para Horários
@@ -241,6 +253,30 @@ function Gerenciamento() {
     medico.especializacao.toLowerCase().includes(filtro.toLowerCase())
   );
 
+  if(loading) {
+    return(
+      <div className='min-h-screen flex flex-col bg-gray-50'>
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-lg">Carregando médicos...</div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-red-500 text-lg">Erro: {error}</div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
@@ -295,7 +331,7 @@ function Gerenciamento() {
                     value={formMedico.nome}
                     onChange={(e) => {
                       setFormMedico({...formMedico, nome: e.target.value});
-                      setErros({...erros, nome: ""});
+                      setError({...erros, nome: ""});
                     }}
                   />
                   {erros.nome && <p className="text-red-500 text-xs mt-1">{erros.nome}</p>}
@@ -309,7 +345,7 @@ function Gerenciamento() {
                     value={formMedico.crm}
                     onChange={(e) => {
                       setFormMedico({...formMedico, crm: e.target.value});
-                      setErros({...erros, crm: ""});
+                      setError({...erros, crm: ""});
                     }}
                   />
                   {erros.crm && <p className="text-red-500 text-xs mt-1">{erros.crm}</p>}
@@ -323,7 +359,7 @@ function Gerenciamento() {
                     value={formMedico.especializacao}
                     onChange={(e) => {
                       setFormMedico({...formMedico, especializacao: e.target.value});
-                      setErros({...erros, especializacao: ""});
+                      setError({...erros, especializacao: ""});
                     }}
                   />
                   {erros.especializacao && <p className="text-red-500 text-xs mt-1">{erros.especializacao}</p>}
