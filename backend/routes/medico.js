@@ -3,7 +3,7 @@ import database from '../database.js';
 
 const router = express.Router();
 
-//POST para criar um novo médico 
+//POST - Criar um cadastro de médico 
 router.post('/', async (req, res) => {
     const {crm, nome, especializacao, notas} = req.body;
 
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 
 });
 
-//READ para consultar cadastro de médicos 
+//READ - consultar cadastro de médicos 
 router.get('/', async (req, res) =>{
     try {
         const [medico] = await database.execute('SELECT * FROM medico');
@@ -45,7 +45,7 @@ router.get('/', async (req, res) =>{
     }
 });
 
-//UPDATE para atualizar um cadastro de médico 
+//UPDATE - atualizar um cadastro de médico 
 router.put('/:id', async (req, res) => {
     const {id} = req.params;
     const {crm, nome, especializacao} = req.body;
@@ -63,7 +63,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-//DELETE de cadastro de médico 
+//DELETE - Deletar cadastro de médico 
 router.delete('/:id', async (req, res) =>{
     const {id} = req.params;
 

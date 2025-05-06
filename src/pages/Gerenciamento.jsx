@@ -7,6 +7,7 @@ function Gerenciamento() {
   const [medicos, setMedicos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [consultas, setConsultas] = useState([]);
 
   // Estados para CRUD
   const [showPopup, setShowPopup] = useState(false);
@@ -35,7 +36,10 @@ function Gerenciamento() {
   useEffect(() => {
     const fetchMedicos = async () => {
       try{
-        const response = await fetch('http://localhost:3000/medico');
+        const [medicoRes, consultasRes] = await Promise.all([
+          fetch('http://localhost:3000/medico'),
+          fetch('http://localhost:3000/consulta')
+        ])
         if (!response.ok){
           throw new Error('Erro ao carregar médicos');
         }
