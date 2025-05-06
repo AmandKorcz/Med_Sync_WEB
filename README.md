@@ -29,19 +29,25 @@ O projeto explora as seguintes tecnologias
 
 <h3>Requisitos Funcionais</h3>
 
-- Login de secretárias, para autenticação dos usuários
-- Visualização da agenda dos médicos, por parte do paciente
-- Confirmação de agendamento (redirecionamento para WhatsApp)
-- Cancelamento de consultas agendadas (redirecionamento para WhatsApp)
-- Acesso às informações do médico: agenda, especialização, CRM.
-- Alterações de informações referente aos médicos por parte das secretárias.
+✅ Login de secretárias, para autenticação dos usuários <br>
+✅ Visualização da agenda dos médicos, por parte do paciente <br>
+❌ Possibilidade de adicionar novo médico na agenda <br>
+❌ Agendamente de uma consulta na agenda do médico por parte da secretária <br>
+❌ Alteração do cadastro de médico <br>
+❌ Alteração do agendamento por parte da secretária <br>
+❌ Exclusão do agendamento por parte da secretária <br>
+❌ Exclusão do cadastro do médico (?) <br>
+✅ Confirmação de agendamento (redirecionamento para WhatsApp) <br>
+✅ Acesso às informações do médico: agenda, especialização, CRM. <br>
+✅ Página com mais informações sobre a clínica/equipe 
+
 
 <h3>Requisitos Não Funcionais</h3>
 
-- Proteção de dados sensíveis (LGPD compliance)
-- Tempo de resposta rápido para agendamentos e consultas
-- Suporte a múltiplos usuários simultaneamente
-- Ferramenta para controle de atividades
+✅ Proteção de dados sensíveis - Login com chave encriptada <br>
+✅ Tempo de resposta rápido para agendamentos e consultas <br>
+❌ Suporte a múltiplos usuários simultaneamente <br>
+✅ Ferramenta para controle de atividades <br>
 
 <h2>Detalhamento 📌</h2>
 <h3>Operações CRUD</h3>
