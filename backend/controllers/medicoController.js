@@ -1,7 +1,7 @@
 const connection = require("../database.js");
 
 //GET - Endpoint para listar os médicos cadastrados
-exports.listarMedicos = (req, res) => {
+exports.listarMedico = (req, res) => {
     connection.query("SELECT * FROM medico", (err, results) => {
         if(err) return res.status(500).json({erro: err});
     });
@@ -19,7 +19,7 @@ exports.criarMedico = (req, res) => {
 };
 
 //PUT - Endpoint para atualizar cadastros dos médicos
-exports.atualizarMedicos = (req, res) => {
+exports.atualizarMedico = (req, res) => {
     const {id} = req.params;
     const {nome, crm, especializacao} = req.body;
 
