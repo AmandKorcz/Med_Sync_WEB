@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const medicoController = require("../database.js");
+const medicoController = require("../controllers/medicoController.js");
 
 router.get('/', medicoController.listarMedico);
 router.post('/', medicoController.criarMedico);
