@@ -1,6 +1,6 @@
 const connection = require("../database.js");
 
-//Criar nova consulta
+//POST - Criar nova consulta
 exports.criarConsulta = (req, res) => {
     const {id_medico, data, horario, descricao} = req.body;
 
@@ -15,7 +15,7 @@ exports.criarConsulta = (req, res) => {
     });
 };
 
-//Listando consultas com os nomes dos médicos 
+//GET - Listando consultas com os nomes dos médicos 
 exports.listarConsultas = (req, res) => {
     const sql = 
         "SELECT c.*, m.nome AS nome_medico FROM consulta c JOIN medico m ON c.id_medico = m.id_medico";
@@ -26,4 +26,4 @@ exports.listarConsultas = (req, res) => {
     });
 };
 
-//Listar consultas por médico 
+//PUT - 
