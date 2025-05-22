@@ -1,13 +1,19 @@
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
-import CriancasImg from "../assets/image/Crianças.jpg";
+import artigo01 from "../assets/image/artigo01.jpg";
+import artigo02 from "../assets/image/artigo02.jpg";
+import artigo03 from "../assets/image/artigo03.jpg";
+import artigo04 from "../assets/image/artigo04.webp";
+import artigo05 from "../assets/image/artigo05.jpg";
+import artigo06 from "../assets/image/artigo06.jpg";
+import artigo07 from "../assets/image/artigo07.jpg";
 
 function Informativo() {
     return(
         <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
             
-            <main className="container mx-auto px-4 py-12 mb-16">
+            <main className="container mx-auto px-4 py-28 mb-16">
                 <section className="text-center mb-16">
                     <h1 className="text-4xl font-bold text-[#00565e]">Informativo Médico</h1>
                     <p className="text-xl text-black max-w-3xl mx-auto">
@@ -21,7 +27,7 @@ function Informativo() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                             <div className="h-48 w-full bg-gray-200 flex items-center justify-center">
-                                <img src={CriancasImg} alt="Crianças em tratamento" className="w-full h-full object-cover" />
+                                <img src={artigo01} alt="Crianças em tratamento" className="w-full h-full object-cover" />
                             </div>
                             <div className="p-6">
                                 <span className="text-sm text-[#00565e]">setembro 2, 2023</span>
@@ -34,7 +40,7 @@ function Informativo() {
 
                         <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                             <div className="h-48 w-full bg-gray-200 flex items-center justify-center">
-                                <img src={CriancasImg} alt="Crianças em tratamento" className="w-full h-full object-cover" />
+                                <img src={artigo02} alt="Crianças em tratamento" className="w-full h-full object-cover" />
                             </div>
                             <div className="p-6">
                                 <span className="text-sm text-[#00565e]">setembro 2, 2023</span>
@@ -47,7 +53,7 @@ function Informativo() {
                     
                         <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                             <div className="h-48 w-full bg-gray-200 flex items-center justify-center">
-                               <img src={CriancasImg} alt="Crianças em tratamento" className="w-full h-full object-cover" />
+                               <img src={artigo03} alt="Crianças em tratamento" className="w-full h-full object-cover" />
                             </div>
                             <div className="p-6">
                                 <span className="text-sm text-[#00565e]">julho 12, 2023</span>
@@ -66,7 +72,7 @@ function Informativo() {
                     <div className="grid md:grid-cols-2 gap-8">
                         <article className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                             <div className="h-40 w-full bg-gray-200 flex items-center justify-center">
-                                <img src={CriancasImg} alt="Crianças em tratamento" className="w-full h-full object-cover" />
+                                <img src={artigo04} alt="Crianças em tratamento" className="w-full h-full object-cover" />
                             </div>
                             <div className="p-6">
                                 <span className="text-sm text-[#00565e]">maio 17, 2023</span>
@@ -79,7 +85,7 @@ function Informativo() {
 
                         <article className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                             <div className="h-40 w-full bg-gray-200 flex items-center justify-center">
-                                <img src={CriancasImg} alt="Crianças em tratamento" className="w-full h-full object-cover" />
+                                <img src={artigo05} alt="Crianças em tratamento" className="w-full h-full object-cover" />
                             </div>
                             <div className="p-6">
                                 <span className="text-sm text-[#00565e]">maio 17, 2023</span>
@@ -92,7 +98,7 @@ function Informativo() {
 
                         <article className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                             <div className="h-40 w-full bg-gray-200 flex items-center justify-center">
-                                <img src={CriancasImg} alt="Crianças em tratamento" className="w-full h-full object-cover" />
+                                <img src={artigo06} alt="Crianças em tratamento" className="w-full h-full object-cover" />
                             </div>
                             <div className="p-6">
                                 <span className="text-sm text-[#00565e]">maio 17, 2023</span>
@@ -105,7 +111,7 @@ function Informativo() {
                         
                         <article className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                             <div className="h-40 w-full bg-gray-200 flex items-center justify-center">
-                                <img src={CriancasImg} alt="Crianças em tratamento" className="w-full h-full object-cover" />
+                                <img src={artigo07} alt="Crianças em tratamento" className="w-full h-full object-cover" />
                             </div>
                             <div className="p-6">
                                 <span className="text-sm text-[#00565e]">abril 10, 2023</span>
@@ -119,10 +125,14 @@ function Informativo() {
                 </section>
                 
                 <section className="mt-16 bg-[#00565e] rounded-xl p-8 text-center text-white">
-                    <h2 className="text-2xl font-bold mb-4">Quer conhecer mais sobre o trabalho de pesquisa?</h2>
+                    <h2 className="text-2xl font-bold mb-4">Você se interessa por pesquisa científica?</h2>
                     <p className="mb-6 max-w-2xl mx-auto">
-                        Profissionais da MedSync podem compartilhar suas pesquisas e artigos para contribuir com a comunidade médica e pacientes.
+                       A MedSync valoriza o conhecimento compartilhado.
                     </p>
+
+                    <p>Profissionais da saúde podem publicar seus artigos, estudos de caso e resultados de pesquisas diretamente na plataforma.</p> 
+                       <p> Contribua para o crescimento da comunidade médica, ajude pacientes e fortaleça sua atuação como pesquisador.</p>
+                <p>Publique, inspire e faça a diferença.</p>
                 </section>
             </main>
             

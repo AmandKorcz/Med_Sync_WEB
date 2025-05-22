@@ -1,6 +1,7 @@
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Clinica from "../assets/image/Clinica.jpg" 
+import CriancasCor from '../assets/image/CriancaCor.jpg';
 import { FaCalendarAlt, FaUserClock, FaShieldAlt, FaUserMd, FaHeartbeat, FaClinicMedical, FaWhatsapp } from "react-icons/fa";
 
 function SobreNos() {
@@ -11,38 +12,38 @@ function SobreNos() {
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
-            <section className="relative bg-gradient-to-br from-[#008E9A] to-[#00B4C5] text-white py-28 px-6 overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==')]"></div>
+            <section
+            className="relative text-white py-42 px-6 overflow-hidden bg-cover bg-center"
+            style={{ backgroundImage: `url(${CriancasCor})` }}
+            >
+            <div className="absolute inset-0 bg-gradient-to-br from-[#008E9A]/80 to-[#00B4C5]/80"></div>
+
+            <div className="max-w-6xl mx-auto text-center relative z-10">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">
+                Conectando <span className="text-[#DFF3F4]">saúde</span> e <span className="text-[#DFF3F4]">tecnologia</span>
+                </h1>
+                <p className="text-xl md:text-2xl max-w-3xl mx-auto mb-8 leading-relaxed">
+                A MedSync reinventa a experiência em saúde com agendamentos simples e atendimento humanizado
+                </p>
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <button className="bg-white text-[#008E9A] hover:bg-[#DFF3F4] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg">
+                    Agendar Consulta
+                </button>
+                <a
+                    href={`${whatsappLink}?text=${whatsappMessage}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border-2 border-white text-white hover:bg-white hover:text-[#008E9A] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2"
+                >
+                    <FaWhatsapp /> Fale Conosco
+                </a>
                 </div>
-                <div className="max-w-6xl mx-auto text-center relative z-10">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">
-                        Conectando <span className="text-[#DFF3F4]">saúde</span> e <span className="text-[#DFF3F4]">tecnologia</span>
-                    </h1>
-                    <p className="text-xl md:text-2xl max-w-3xl mx-auto mb-8 leading-relaxed">
-                        A MedSync reinventa a experiência em saúde com agendamentos simples e atendimento humanizado
-                    </p>
-                    <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <button className="bg-white text-[#008E9A] hover:bg-[#DFF3F4] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg">
-                            Agendar Consulta
-                        </button>
-                        <a 
-                            href={`${whatsappLink}?text=${whatsappMessage}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="border-2 border-white text-white hover:bg-white hover:text-[#008E9A] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2"
-                        >
-                            <FaWhatsapp /> Fale Conosco
-                        </a>
-                    </div>
-                </div>
+            </div>
             </section>
-            <section className="py-20 px-6 bg-white">
+
+            <section className="py-10 px-6 bg-white">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
-                        <span className="inline-block bg-[#DFF3F4] text-[#008E9A] px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                            SOBRE NÓS
-                        </span>
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                             Quem somos?
                         </h2>
@@ -87,7 +88,7 @@ function SobreNos() {
                     </div>
                 </div>
             </section>
-            <section className="py-20 px-6 bg-gradient-to-br from-[#F8FDFD] to-[#E6F7F8]">
+            <section className="py-34 px-6 bg-gradient-to-br from-[#F8FDFD] to-[#E6F7F8]">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex flex-col lg:flex-row items-stretch gap-8"> 
                         <div className="lg:w-1/2">
