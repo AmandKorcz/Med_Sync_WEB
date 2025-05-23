@@ -8,6 +8,6 @@ const {body, validationResult} = require('express-validation');
 router.post('/', autenticarToken, medicoController.criarMedico);
 router.get('/', autenticarToken, medicoController.listarMedico);
 router.put('/:id', autenticarToken, medicoController.atualizarMedico);
-router.put('/:id', autenticarToken, medicoController.deletarMedico);
+router.delete('/:id', autenticarToken, medicoController.deletarMedico);
 
 module.exports = router;

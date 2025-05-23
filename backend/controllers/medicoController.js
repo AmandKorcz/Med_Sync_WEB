@@ -22,13 +22,8 @@ exports.criarMedico = async (req, res) => {
         return res.status(400).json({ message: "Nome, CRM e especialização são obrigatórios" });
     }
     console.log('Dados recebidos: ', {nome, email, senha});
-
-    try{
-        console.log("Iniciando a criptografia da senha");
-        const senhaCriptografada = await bcrypt.hash(senha, 10);
-        console.log("Senha criptografada com sucesso!");
-
-        connection.query(
+    
+    connection.query(
             "INSERT INTO medico (nome, crm, especializacao) VALUES (?, ?, ?)",
             [nome, crm, especializacao],
             (err, results) => {

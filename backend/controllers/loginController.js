@@ -21,7 +21,7 @@ exports.loginSecretaria = (req, res) => {
 
         const usuario = results[0];
         console.log("Usuário encontrado. Comparando senha...");
-        const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+        const senhaCorreta = await bcrypt.compare(senha, usuario.senha_hash);
         console.log("Resultado da comparação: ", senhaCorreta);
         if (!senhaCorreta) {
             console.log("Senha incorreta para o usuário: ", usuario.email);
@@ -32,3 +32,5 @@ exports.loginSecretaria = (req, res) => {
         res.status(200).json({message: "Login realizado com sucesso!", token});
     });
 };
+
+//Criar novo login

@@ -25,14 +25,14 @@ function loginSecretaria(){
     });
 }
 
-async function listarMedico(){
+async function listarMedicoAPI(){
     if (!token) {
         console.log("Erro:  é necessário estar logado para realizar essa operação");
         return mostrarMenu();
     }
 
     try {
-        const response = await axios.get('http://localhost:3000/', {
+        const response = await axios.get('http://localhost:3000/medico', {
             headers: {Authorization: `Bearer ${token}`}
         });
         console.table(response.data);
@@ -50,7 +50,7 @@ function criarMedico() {
         {type: 'input', name: 'especializacao', message: 'Especialização: '} 
     ]).then(async answers => {
         try {
-            const response = await axios.post('http://localhost:3000/', {
+            const response = await axios.post('http://localhost:3000/medico', {
                 nome: answers.nome,
                 crm: answers.crm,
                 especializacao: answers.especializacao
@@ -131,7 +131,7 @@ function mostrarMenu() {
                 loginSecretaria();
                 break;
             case 'Listar médicos':
-                listarMedico();
+                listarMedicoAPI();
                 break;
             case 'Criar médico':
                 criarMedico();
