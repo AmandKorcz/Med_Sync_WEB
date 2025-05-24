@@ -239,23 +239,21 @@ function Principal() {
               ))}
             </div>
 
-            {/* Controles do Carrossel */}
             <button
               onClick={prevSlide}
               className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition backdrop-blur-sm"
               aria-label="Slide anterior"
             >
-              <FaChevronLeft size={24} />
+              <FaChevronLeft />
             </button>
             <button
               onClick={nextSlide}
               className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition backdrop-blur-sm"
               aria-label="Próximo slide"
             >
-              <FaChevronRight size={24} />
+              <FaChevronRight />
             </button>
 
-            {/* Indicadores */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
               {carouselImages.map((_, index) => (
                 <button
@@ -316,6 +314,7 @@ function Principal() {
           rel="noopener noreferrer"
           className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition duration-300"
           aria-label="Conversar no WhatsApp"
+          
         >
           <svg
             className="w-8 h-8"
