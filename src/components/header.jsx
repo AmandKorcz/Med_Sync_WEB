@@ -30,6 +30,22 @@ function Header() {
             Atendimentos
           </Typography>
           
+            <Typography
+            as="button"
+            className="text-white hover:text-[#A3DDEA] transition-colors cursor-pointer bg-transparent border-none"
+            onClick={() => navigateTo("/Convenio")}
+          > 
+            Convênio
+          </Typography>
+
+             <Typography
+            as="button"
+            className="text-white hover:text-[#A3DDEA] transition-colors cursor-pointer bg-transparent border-none"
+            onClick={() => navigateTo("/Informativo")}
+          > 
+            Informativo
+          </Typography>
+
           <Typography
             as="button"
             className="text-white hover:text-[#A3DDEA] transition-colors cursor-pointer bg-transparent border-none"

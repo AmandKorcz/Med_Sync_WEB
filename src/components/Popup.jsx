@@ -7,9 +7,9 @@ const Popup = ({ medico, data, horario, onClose, onContact }) => {
   const [mostrarOpcoesPagamento, setMostrarOpcoesPagamento] = useState(false);
 
   const formasPagamento = [
-    { id: 1, nome: 'Cartão de Crédito' },
-    { id: 2, nome: 'PIX' },
-    { id: 3, nome: 'Boleto Bancário' }
+    { id: 1, nome: 'Cartão de Crédito', icone: '💳' },
+    { id: 2, nome: 'PIX', icone: '🧾' },
+    { id: 3, nome: 'Boleto Bancário', icone: '📄' }
   ];
 
   const handleWhatsAppClick = () => {
@@ -24,7 +24,7 @@ const Popup = ({ medico, data, horario, onClose, onContact }) => {
 
     const phoneNumber = "5547984747598";
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
-    onContact();
+    onContact && onContact();
   };
 
   const selecionarPagamento = (forma) => {
@@ -33,31 +33,55 @@ const Popup = ({ medico, data, horario, onClose, onContact }) => {
   };
 
   const styles = {
-    paymentButton: "bg-[#f0f0f0] hover:bg-[#e0e0e0] text-gray-800 py-2 px-4 rounded-lg text-left transition-colors",
-    whatsappButton: "flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3 px-4 rounded-lg w-full transition-colors",
-    closeButton: "bg-[#008E9A] hover:bg-[#006E7A] text-white font-medium py-2 px-4 rounded-lg w-full transition-colors",
-    selectedPayment: "bg-[#008E9A] text-white font-medium",
-    valorConsulta: "text-lg font-bold text-[#00565e]"
+    popupContainer: "fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4 backdrop-blur-sm",
+    popupContent: "bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-fade-in transform transition-all",
+    title: "text-2xl font-bold text-[#00565e] mb-4 text-center",
+    detailsContainer: "mb-6 p-5 bg-gradient-to-r from-[#f0f9ff] to-[#e0f2fe] rounded-xl space-y-3 border border-[#e1e8ed]",
+    detailItem: "flex justify-between",
+    detailLabel: "font-medium text-[#4b5563]",
+    detailValue: "text-[#1f2937]",
+    valorConsulta: "text-xl font-bold text-[#00565e]",
+    sectionTitle: "text-lg font-semibold text-[#008E9A] mb-3",
+    paymentButton: "flex items-center gap-3 bg-white hover:bg-[#f0f9ff] text-gray-800 py-3 px-4 rounded-lg text-left transition-all border border-[#e1e8ed] hover:border-[#008E9A] shadow-sm",
+    selectedPayment: "bg-[#008E9A] text-black border-[#008E9A] hover:bg-[#008E9A]",
+    paymentOptions: "flex flex-col gap-3 mt-2 animate-fade-in",
+    whatsappButton: "flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3 px-6 rounded-lg w-full transition-all shadow-md hover:shadow-lg",
+    closeButton: "bg-white hover:bg-gray-100 text-[#008E9A] font-medium py-2.5 px-4 rounded-lg w-full transition-all border-2 border-[#008E9A] hover:border-[#006E7A]",
+    errorText: "text-sm text-red-500 mt-2 text-center",
+    paymentIcon: "text-black",
+  
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 animate-fade-in">
-        <h2 className="text-2xl font-bold text-[#00565e] mb-4">Dê continuidade em seu agendamento!</h2>
+    <div className={styles.popupContainer}>
+      <div className={styles.popupContent}>
+        <h2 className={styles.title}>Confirme seu agendamento</h2>
         
-        <div className="mb-6 p-4 bg-gray-100 rounded-lg space-y-2">
-          <p className="font-semibold">Detalhes do agendamento:</p>
-          <div className="space-y-1">
-            <p className="text-lg"><span className="font-medium">Médico:</span> {medico}</p>
-            <p className="text-lg"><span className="font-medium">Data:</span> {data}</p>
-            <p className="text-lg"><span className="font-medium">Horário:</span> {horario}</p>
-            <p className={styles.valorConsulta}><span className="font-medium">Valor:</span> {valorConsulta}</p>
+        <div className={styles.detailsContainer}>
+          <p className="font-semibold text-[#008E9A] mb-2">Detalhes do agendamento</p>
+          <div className="space-y-3">
+            <div className={styles.detailItem}>
+              <span className={styles.detailLabel}>Médico:</span>
+              <span className={styles.detailValue}>{medico}</span>
+            </div>
+            <div className={styles.detailItem}>
+              <span className={styles.detailLabel}>Data:</span>
+              <span className={styles.detailValue}>{data}</span>
+            </div>
+            <div className={styles.detailItem}>
+              <span className={styles.detailLabel}>Horário:</span>
+              <span className={styles.detailValue}>{horario}</span>
+            </div>
+            <div className={styles.detailItem}>
+              <span className={styles.detailLabel}>Valor:</span>
+              <span className={styles.valorConsulta}>{valorConsulta}</span>
+            </div>
           </div>
         </div>
 
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-[#008E9A] mb-2">
-            Realize o pagamento total ou parcial da consulta
+          <h3 className={styles.sectionTitle}>
+            Selecione a forma de pagamento
           </h3>
           
           {!mostrarOpcoesPagamento ? (
@@ -65,16 +89,24 @@ const Popup = ({ medico, data, horario, onClose, onContact }) => {
               onClick={() => setMostrarOpcoesPagamento(true)}
               className={`${styles.paymentButton} ${pagamentoSelecionado ? styles.selectedPayment : ''}`}
             >
-              {pagamentoSelecionado ? pagamentoSelecionado.nome : 'Selecione a forma de pagamento'}
+              {pagamentoSelecionado ? (
+                <>
+                  <span className={styles.paymentIcon}>{pagamentoSelecionado.icone}</span>
+                  {pagamentoSelecionado.nome}
+                </>
+              ) : (
+                'Clique para selecionar'
+              )}
             </button>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className={styles.paymentOptions}>
               {formasPagamento.map((forma) => (
                 <button 
                   key={forma.id}
                   onClick={() => selecionarPagamento(forma)}
                   className={styles.paymentButton}
                 >
+                  <span className={styles.paymentIcon}>{forma.icone}</span>
                   {forma.nome}
                 </button>
               ))}
@@ -83,17 +115,17 @@ const Popup = ({ medico, data, horario, onClose, onContact }) => {
         </div>
 
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-[#008E9A] mb-2">Mais informações</h3>
+          <h3 className={styles.sectionTitle}>Finalizar agendamento</h3>
           <button 
             onClick={handleWhatsAppClick}
             className={styles.whatsappButton}
             disabled={!pagamentoSelecionado}
           >
             <WhatsAppIcon />
-            {pagamentoSelecionado ? 'CONFIRMAR AGENDAMENTO' : 'SELECIONE UMA FORMA DE PAGAMENTO'}
+            {pagamentoSelecionado ? 'Confirmar via WhatsApp' : 'Selecione o pagamento'}
           </button>
           {!pagamentoSelecionado && (
-            <p className="text-sm text-red-500 mt-2">Por favor, selecione uma forma de pagamento</p>
+            <p className={styles.errorText}>Por favor, selecione uma forma de pagamento</p>
           )}
         </div>
 
@@ -115,13 +147,12 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
-// Validação de props
 Popup.propTypes = {
   medico: PropTypes.string.isRequired,
   data: PropTypes.string.isRequired,
   horario: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  onContact: PropTypes.func.isRequired
+  onContact: PropTypes.func
 };
 
 export default Popup;

@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import Atendimento from "./pages/Atendimento";
 import SobreNos from "./pages/SobreNos";
 import Gerenciamento from "./pages/Gerenciamento";
+import Convenio from "./pages/Convenio";
+import Informativo from "./pages/Informativo";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Route path="/atendimento" element={<Atendimento />} />
       <Route path="/sobre-nos" element={<SobreNos />} />
       <Route path="/gerenciamento" element={<Gerenciamento />} />
+      <Route path="/Convenio" element={<Convenio/>}/>
+      <Route path="/Informativo" element={<Informativo/>}/> 
       <Route path="*" element={<Principal />} />
     </Routes>
   );
