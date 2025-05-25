@@ -1,13 +1,15 @@
-import mysql from 'mysql2/promise';
+const mysql = require('mysql2');
 
-const database = mysql.createPool({
+const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'amanda',
-    database: 'medsync',
-    waitForConnections: true, 
-    connectionLimit: 10, 
-    queueLimit: 0,
+    database: 'medsync'
 });
 
-export default database;
+connection.connect(err=> {
+    if (err) throw err;
+    console.log("Connected to the database");
+});
+
+module.exports = connection;
