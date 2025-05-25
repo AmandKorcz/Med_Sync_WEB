@@ -1,11 +1,11 @@
 const connection = require('../database');
 const bcrypt = require('bcrypt');
-const jwt = require('jwtwebtoken');
+const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 
 
 //Login da secretária
-exports.loginSecretaria = (req, res) => {
+exports.loginUsuario = (req, res) => {
     const {email, senha} = req.body;
     if (!email || !senha) return res.status(400).json({message: "Email e senha obrigatórios"});
     console.log("Tentativa de login com o email: ", email);
@@ -34,3 +34,34 @@ exports.loginSecretaria = (req, res) => {
 };
 
 //Criar novo login
+exports.criarUsuario = async (req, res) => {
+    const erros = validationResult(req);
+    if(!erros.isEmpty()) {
+        return res.status(400).json({erros: erros.array()});
+    }
+
+    const {nome, email, senha} = req.body;
+    console.log("Dados recebidos: ", {nome, email, senha});
+
+    try{
+        console.log("Iniciando criptografia de senha");
+        const senhaCriptografada = await bcrypt.hash(senha, 10);
+        console.log("Senha criptografada com sucesso");
+
+        connection.query(
+            "INSERT INTO secretaria (nome, email, senha) VALUES (?,?,?)",
+            [nome, email, senhaCriptografada],
+            (err, results) => {
+                if (err) {
+                    console.log("Erro ao inserir novo dado ao MySQL: ", err);
+                    return res.status(500).json({erro: err.message});
+                }
+                console.log("Novo usuário adicionado com sucesso ao banco de dados, ID: ", results.insertId);
+                res.status(201).json({message: "Usuário criado com sucesso", id: results.insertId});
+            }
+        );
+    } catch (error) {
+        console.log("Erro geral no try: ", error);
+        res.status(500).json({erro: error.message});
+    }
+};

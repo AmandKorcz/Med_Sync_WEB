@@ -5,7 +5,7 @@ const axios = require('axios');
 
 let token = null;
 
-function loginSecretaria(){
+function loginUsuario(){
     inquirer.prompt([
         {type: 'input', name: 'email', message: 'Digite o email: '},
         {type: 'password', name: 'senha', message: 'Digite a senha: '}
@@ -23,6 +23,29 @@ function loginSecretaria(){
             mostrarMenu();
         }
     });
+}
+
+function criarUsuario() {
+    inquirer.prompt([
+        {type: 'input', name: 'nome', message: 'Nome: '},
+        {type: 'input', name: 'email', message: 'Email: '},
+        {type: 'input', name: 'senha', message: 'Senha: '}
+    ]).then(async answers => {
+        try {
+            const response = await axios.post('http://localhost:3000/login/register', {
+                nome: answers.nome,
+                email: answers.email,
+                senha: answers.senha
+            });
+            console.log("Usuário criado com sucesso, ID: ", response.data.id);
+        } catch (error) {
+            console.error("Erro ao criar usuário: ", error.response?.data?.message || error.message);
+            console.error("Detalhes do erro: ", error.response?.data);
+            console.error("Detalhes completos do erro: ", error);
+        } finally {
+            mostrarMenu();
+        }
+    })
 }
 
 async function listarMedicoAPI(){
@@ -46,7 +69,7 @@ async function listarMedicoAPI(){
 function criarMedico() {
     inquirer.prompt([
         {type: 'input', name: 'nome', message: 'Nome: '},
-        {type: 'input', name: 'CRM', message: 'CRM: '},
+        {type: 'input', name: 'crm', message: 'CRM: '},
         {type: 'input', name: 'especializacao', message: 'Especialização: '} 
     ]).then(async answers => {
         try {
@@ -79,7 +102,7 @@ function atualizarMedico() {
         {type: 'input', name: 'especializacao', message: 'Especialização: '} 
     ]).then(async answers => {
         try {
-            const response = await axios.put(`http://localhost:3000/${answers.id}`, {
+            const response = await axios.put(`http://localhost:3000/medico/${answers.id}`, {
                 nome: answers.nome,
                 crm: answers.crm,
                 especializacao: answers.especializacao
@@ -105,7 +128,7 @@ function deletarMedico() {
         {type: 'input', name: 'id', message: 'Digite o ID: '},
     ]).then(async answers => {
         try {
-            const response = await axios.delete(`http://localhost:3000/${answers.id}`, {
+            const response = await axios.delete(`http://localhost:3000/medico/${answers.id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             console.log(response.data.message);
@@ -123,12 +146,15 @@ function mostrarMenu() {
             type: 'list',
             name: 'opcao',
             message: 'Escolha uma das opções a seguir:',
-            choices: ['Login', 'Listar médicos', 'Criar médico', 'Atualizar médico', 'Deletar médico', 'Sair']
+            choices: ['Login', 'Criar Usuário', 'Listar médicos', 'Criar médico', 'Atualizar médico', 'Deletar médico', 'Sair']
         }
     ]).then(answers => {
         switch (answers.opcao) {
             case 'Login':
-                loginSecretaria();
+                loginUsuario();
+                break;
+            case 'Criar Usuário':
+                criarUsuario();
                 break;
             case 'Listar médicos':
                 listarMedicoAPI();

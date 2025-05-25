@@ -24,25 +24,21 @@ exports.criarMedico = async (req, res) => {
     console.log('Dados recebidos: ', {nome, email, senha});
     
     connection.query(
-            "INSERT INTO medico (nome, crm, especializacao) VALUES (?, ?, ?)",
-            [nome, crm, especializacao],
-            (err, results) => {
-                if (err) {
-                    console.log("Erro ao criar novo médico, ", err);
-                    return res.status(500).json({erro: err.message});
-                }
-                console.log("Médico criado com sucesso!, ID: ", results.insertId);
-                res.status(201).json({
-                    message: "Médico criado com sucesso",
-                    id: results.insertId,
-                });
+        "INSERT INTO medico (nome, crm, especializacao) VALUES (?, ?, ?)",
+        [nome, crm, especializacao],
+        (err, results) => {
+            if (err) {
+                console.log("Erro ao criar novo médico, ", err);
+                return res.status(500).json({erro: err.message});
             }
-        );
-    }catch {
-        console.log("Erro geral no try: ", error);
-        res.status(500).json({erro: error.message});
-    }
-};
+            console.log("Médico criado com sucesso!, ID: ", results.insertId);
+            res.status(201).json({
+                message: "Médico criado com sucesso",
+                id: results.insertId,
+            });
+        }
+    );
+}
 
 // PUT - Atualizar médico
 exports.atualizarMedico = (req, res) => {
