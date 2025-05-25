@@ -1,129 +1,219 @@
-import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
+import Header from "../components/header.jsx";
 import { useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
 
-function Login() {
-    const navigate = useNavigate();
-    const [mostrarSenha, setMostrarSenha] = useState(false);
-    const [credenciais, setCredenciais] = useState({
-        email: "",
-        senha: ""
-    });
-    const [erro, setErro] = useState(""); // Mensagens de erro (validação/inicio de teste )
-    const [loading, setLoading] = useState(false);
+export default function Login() {
+  const [showPasswordLogin, setShowPasswordLogin] = useState(false);
+  const [showPasswordRegister, setShowPasswordRegister] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setCredenciais(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
+  return (
+    <main className="bg-gradient-to-br ">
+      <Header />
+      
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="min-h-screen flex items-center justify-center px-4 py-12"
+      >
+        <div className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
+          {/* Login */}
+          <motion.div 
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="w-full md:w-1/2 p-8 md:p-10"
+          >
+            <h2 className="text-3xl font-extrabold text-[#008E9A] mb-8">
+             Login
+            </h2>
 
-    const handleLogin = async (e) => {
-        e.preventDefault(); 
+            <form className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <label className="block text-[#008E9A] font-medium mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="Digite seu email"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200"
+                />
+              </motion.div>
 
-        try{
-            const response = await fetch('http://localhost:3000/login',{
-                method: "POST", 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(credenciais),
-            });
+              <motion.div 
+                className="relative"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <label className="block text-[#008E9A] font-medium mb-2">
+                  Senha
+                </label>
+                <input
+                  type={showPasswordLogin ? "text" : "password"}
+                  placeholder="Digite sua senha"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200"
+                />
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="absolute top-10 right-4 cursor-pointer text-gray-600"
+                  onClick={() => setShowPasswordLogin(!showPasswordLogin)}
+                >
+                  {showPasswordLogin ? <EyeOff size={20} /> : <Eye size={20} />}
+                </motion.div>
+              </motion.div>
 
-            const data = await response.json().catch(() => null);
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="flex justify-end"
+              >
+                <a href="#" className="text-sm text-teal-600 hover:underline hover:text-teal-700 transition-colors">
+                  Esqueceu sua senha?
+                </a>
+              </motion.div>
 
-            if(!response.ok){
-                setErro(data?.mensagem || "Erro no login");
-                return;
-            }
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                className="w-full px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                Entrar
+              </motion.button>
+            </form>
+          </motion.div>
 
-            //em caso de login bem-sucedido 
-            console.log("Usuário logado", data.secretaria);
-            setErro('');
-            navigate('/gerenciamento');
-        }catch(error){
-            console.error('Erro na requisição: ', erro);
-            setErro('Erro ao conectar com o servidor');
-        }finally{
-            setLoading(false);
-        }
-    };
+          {/* Cadastro */}
+          <motion.div
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="w-full md:w-1/2 p-8 md:p-10 bg-gradient-to-br bg-[#008E9A] to-teal-500"
+          >
+            <h2 className="text-3xl font-extrabold text-white mb-8">
+              Cadastre-se
+            </h2>
 
-    return (
-        <div className="min-h-screen flex flex-col"> 
-            <Header />
-            <main className="flex-grow flex items-center justify-center p-4 min-h-[calc(100vh-160px)]">
-                <div className="w-full max-w-md mx-auto">
-                    <form 
-                        onSubmit={handleLogin} 
-                        className="bg-white rounded-lg shadow-md p-8 space-y-6">
-                        <div className="text-center">
-                            <h1 className="text-2xl font-bold text-[#49BBBD] mb-2">MedSync</h1>
-                            <p className="text-sm text-gray-600 mb-4">CLINICA INFANTIL</p>
-                            <p className="text-sm mb-4">Faça login em sua conta</p>
-                        </div>
-                        
-                        {erro && (
-                            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                                {erro}
-                            </div>
-                        )}
-                        
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm mb-1 text-gray-700">Email</label>
-                                <input
-                                    type="text"
-                                    name="email"
-                                    placeholder="Digite seu email"
-                                    className="w-full border border-[#49BBBD] rounded-full px-4 py-2 text-sm outline-none placeholder:text-gray-400"
-                                    value={credenciais.email}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm mb-1 text-gray-700">Senha</label>
-                                <div className="relative">
-                                    <input
-                                        type={mostrarSenha ? "text" : "password"}
-                                        name="senha"
-                                        placeholder="Digite sua senha"
-                                        className="w-full border border-[#49BBBD] rounded-full px-4 py-2 text-sm outline-none placeholder:text-gray-400 pr-10"
-                                        value={credenciais.senha}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        className="absolute right-3 top-2.5 text-gray-500"
-                                        onClick={() => setMostrarSenha(!mostrarSenha)}
-                                    >
-                                        {mostrarSenha ? (
-                                            <EyeSlashIcon className="h-5 w-5" />
-                                        ) : (
-                                            <EyeIcon className="h-5 w-5" />
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <button 
-                            type="submit"
-                            className="w-full bg-[#49BBBD] text-white px-10 py-2 rounded-full hover:bg-[#3aa9ab] transition"
-                        >
-                            Login
-                        </button>
-                    </form>
-                </div>
-            </main>
-            <Footer />
+            <form className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <label className="block text-white font-medium mb-2">
+                  Nome completo
+                </label>
+                <input
+                  type="text"
+                  placeholder="Digite seu nome"
+                  className="w-full px-4 py-3 bg-white/90 border border-white/50 rounded-xl placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-all duration-200"
+                />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <label className="block text-white font-medium mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="Digite seu email"
+                  className="w-full px-4 py-3 bg-white/90 border border-white/50 rounded-xl placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-all duration-200"
+                />
+              </motion.div>
+
+              <motion.div 
+                className="relative"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <label className="block text-white font-medium mb-2">
+                  Senha
+                </label>
+                <input
+                  type={showPasswordRegister ? "text" : "password"}
+                  placeholder="Crie uma senha"
+                  className="w-full px-4 py-3 bg-white/90 border border-white/50 rounded-xl placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-all duration-200"
+                />
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="absolute top-10 right-4 cursor-pointer text-teal-600"
+                  onClick={() => setShowPasswordRegister(!showPasswordRegister)}
+                >
+                  {showPasswordRegister ? <EyeOff size={20} /> : <Eye size={20} />}
+                </motion.div>
+              </motion.div>
+
+              {/* Termos de Uso */}
+              <motion.div
+                className="flex items-start"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={acceptedTerms}
+                  onChange={() => setAcceptedTerms(!acceptedTerms)}
+                  className="mt-1 h-4 w-4 text-teal-600 bg-white border-gray-300 rounded focus:ring-white"
+                />
+                <label
+                  htmlFor="terms"
+                  className="ml-2 text-sm text-white"
+                >
+                  Eu aceito os{" "}
+                  <a
+                    href="#"
+                    className="underline hover:text-white/80 transition-colors"
+                  >
+                    Termos de Uso
+                  </a>{" "}
+                  e a{" "}
+                  <a
+                    href="#"
+                    className="underline hover:text-white/80 transition-colors"
+                  >
+                    Política de Privacidade
+                  </a>
+                  .
+                </label>
+              </motion.div>
+
+              <motion.button
+                whileHover={{ scale: acceptedTerms ? 1.02 : 1 }}
+                whileTap={{ scale: acceptedTerms ? 0.98 : 1 }}
+                type="submit"
+                disabled={!acceptedTerms}
+                className={`w-full px-6 py-3 ${
+                  acceptedTerms
+                    ? "bg-white text-teal-600 hover:bg-gray-100"
+                    : "bg-white/40 text-teal-300 cursor-not-allowed"
+                } font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300`}
+              >
+                Cadastrar
+              </motion.button>
+            </form>
+          </motion.div>
         </div>
-    ); 
+      </motion.div>
+      
+      <Footer />
+    </main>
+  );
 }
-
-export default Login;
