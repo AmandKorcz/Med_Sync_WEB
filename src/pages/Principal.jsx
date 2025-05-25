@@ -128,7 +128,7 @@ function Principal() {
     let interval;
 
     const startInterval = () => {
-      interval = setInterval(nextSlide, 8000);
+      interval = setInterval(nextSlide, 15000);
     };
 
     const handleVisibilityChange = () => {
