@@ -11,6 +11,7 @@ app.use(cors({
 */
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const loginRouter = require('./routes/login.js');
 app.use('/login', loginRouter);

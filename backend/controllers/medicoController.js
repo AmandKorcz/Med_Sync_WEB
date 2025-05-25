@@ -45,7 +45,7 @@ exports.atualizarMedico = (req, res) => {
     const { id } = req.params;
     const { nome, crm, especializacao } = req.body;
 
-    console.log("Dados recebidos: ", {id, nome, email});
+    console.log("Dados recebidos: ", {id, nome, crm, especializacao});
 
     connection.query( "UPDATE medico SET nome = ?, crm = ?, especializacao = ? WHERE id_medico = ?", [nome, crm, especializacao, id], (err, results) => {
         if (err) return res.status(500).json({ erro: err });

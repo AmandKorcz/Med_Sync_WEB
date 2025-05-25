@@ -147,7 +147,7 @@ async function listarConsultasPorMedico(){
         {type: 'input', name: 'id', message: 'ID do médico para ver as consultas marcadas: '}
     ]).then(async ({id}) => {
         try{
-            const response = await axios.get(`http://localhost:3000/consulta/medico/${id}`, {
+            const response = await axios.get(`http://localhost:3000/consultas/medico/${id}`, {
                 headers: {Authorization: `Bearer ${token}`}
             });
             console.table(response.data);
@@ -164,17 +164,17 @@ function criarConsulta(){
 
     inquirer.prompt([
         { type: 'input', name: 'id_medico', message: 'ID do médico:' },
-        { type: 'input', name: 'data', message: 'Data da consulta (YYYY-MM-DD):' },
-        { type: 'input', name: 'hora', message: 'Hora da consulta (HH:MM):' },
         { type: 'input', name: 'nome_paciente', message: 'Nome do paciente:' },
-        { type: 'input', name: 'observacoes', message: 'Observações: '}
+        { type: 'input', name: 'data_consulta', message: 'Data da consulta (YYYY-MM-DD):' },
+        { type: 'input', name: 'hora_consulta', message: 'Hora da consulta (HH:MM):' },
+        { type: 'input', name: 'observacoes', message: 'Observações (opcional): ', default: ''}
     ]).then(async answers => {
         try{
-            const response = await axios.post('http://localhost:3000/consulta', {
+            const response = await axios.post('http://localhost:3000/consultas', {
                 id_medico: answers.id_medico,
-                data: answers.data,
-                hora: answers.hora,
                 nome_paciente: answers.nome_paciente,
+                data_consulta: answers.data_consulta,
+                hora_consulta: answers.hora_consulta,
                 observacoes: answers.observacoes
             },{
                 headers: {Authorization: `Bearer ${token}`}
@@ -194,17 +194,17 @@ function atualizarConsulta() {
     inquirer.prompt([
         {type: 'input', name: 'id', message: 'ID da consulta: '},
         {type: 'input', name: 'id_medico', message: 'ID do médico: '},
-        {type: 'input', name: 'data', message: 'Data (YYYY-MM-DD): '},
-        {type: 'input', name: 'hora', message: 'Hora (HH:MM): '},
         {type: 'input', name: 'nome_paciente', message: 'Nome do paciente: '},
+        {type: 'input', name: 'data_consulta', message: 'Data (YYYY-MM-DD): '},
+        {type: 'input', name: 'hora_consulta', message: 'Hora (HH:MM): '},
         {type: 'inpt', name: 'observacoes', message: 'Observações: '}
     ]).then(async answers => {
         try{
-            const response = await axios.put(`http://localhost:3000/consulta/${answers.id}`, {
+            const response = await axios.put(`http://localhost:3000/consultas/${answers.id}`, {
                 id_medico: answers.id_medico,
-                data: answers.data,
-                hora: answers.hora,
                 nome_paciente: answers.nome_paciente,
+                data_consulta: answers.data_consulta,
+                hora_consulta: answers.hora_consulta,
                 observacoes: answers.observacoes
             }, {
                 headers: {Authorization: `Bearer ${token}`}
@@ -225,7 +225,7 @@ function deletarConsulta(){
         {type: 'input', name: 'id', message: 'ID da consulta: '}
     ]).then(async answers => {
         try{
-            await axios.delete(`http://localhost:3000/consulta/${answers.id}`, {
+            await axios.delete(`http://localhost:3000/consultas/${answers.id}`, {
                 headers: {Authorization: `Bearer ${token}`}
             });
             console.log("Consulta deletada com sucesso");

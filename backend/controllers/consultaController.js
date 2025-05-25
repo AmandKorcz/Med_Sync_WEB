@@ -1,5 +1,6 @@
 const connection = require("../database.js");
-const {validationResult} = require("express-validation");
+const { validationResult } = require('express-validator');
+
 
 //GET - Listando as consultas de um medico 
 exports.listarConsultasPorMedico = (req, res) => {
@@ -16,9 +17,12 @@ exports.listarConsultasPorMedico = (req, res) => {
 
 //POST - Criar nova consulta 
 exports.criarConsulta = (req, res) => {
-    const erros = validationResult(req);
-    if(!erros.isEmpty()){
-        return res.status(400).json({erros: erros.array()});
+    console.log("Corpo da requisição:", req.body);
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log("Erros de validação:", errors.array());
+        return res.status(400).json({erros: errors.array()});
     }
 
     const { id_medico, nome_paciente, data_consulta, 
