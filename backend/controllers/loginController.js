@@ -21,14 +21,14 @@ exports.loginUsuario = (req, res) => {
 
         const usuario = results[0];
         console.log("Usuário encontrado. Comparando senha...");
-        const senhaCorreta = await bcrypt.compare(senha, usuario.senha_hash);
+        const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
         console.log("Resultado da comparação: ", senhaCorreta);
         if (!senhaCorreta) {
             console.log("Senha incorreta para o usuário: ", usuario.email);
             return res.status(401).json({message: "Senha ou usuário incorretos."});
         }
 
-        const token = jwt.sign ({id: usuario.id, email: usuario.email, senha: usuario.senha}, 'secreto', {expiresIn: '1h'});
+        const token = jwt.sign ({id: usuario.id_secretaria, email: usuario.email, senha: usuario.senha}, 'secreto', {expiresIn: '1h'});
         res.status(200).json({message: "Login realizado com sucesso!", token});
     });
 };

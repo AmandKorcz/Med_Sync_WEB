@@ -6,7 +6,7 @@ const {body, validationResult} = require('express-validation');
 
 //Rotas autenticadas
 router.post('/', autenticarToken, medicoController.criarMedico);
-router.get('/', autenticarToken, medicoController.listarMedico);
+router.get('/', autenticarToken, medicoController.listarMedicoAPI);
 router.put('/:id', autenticarToken, medicoController.atualizarMedico);
 router.delete('/:id', autenticarToken, medicoController.deletarMedico);
 
