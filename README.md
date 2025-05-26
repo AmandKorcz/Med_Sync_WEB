@@ -78,3 +78,8 @@ O projeto foi aceito pelo Professor orientador com entusiasmo, levando em consid
 <br>
 
 Observação: Foi realizada uma alteração de funcionalidades no escopo do projeto no dia 21/03/2025, com o intuito de adiministrar as atividade de acordo com o tempo de desenvolvimento diponível.
+
+<h2>Dependências</h2>
+
+Vite: npm install vite --save-dev <br>
+
