@@ -10,5 +10,13 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.1",
     "router": "^2.2.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.1.1"
   }
 }
