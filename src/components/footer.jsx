@@ -1,9 +1,17 @@
 import { Typography } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
 import Atendimento from "../pages/Atendimento.jsx";
 import SobreNos from "../pages/SobreNos.jsx";
 
 function Footer() {
+  const navigate = useNavigate(); 
+
+  const handleAdminClick = (e) => {
+    e.preventDefault();
+    navigate('/login');
+    window.scrollTo(0, 0); 
+  };
+
   return (
     <footer className="w-full bg-[#008E9A] p-10 pb-10 pt-12 h-50">
     <div className="max-w-screen-xl mx-auto px-6">
@@ -37,8 +45,9 @@ function Footer() {
             <li>
               <Typography
                as={Link}
-               to="/login" 
-                className="font-normal text-white hover:text-[#A3DDEA] transition-colors"
+               to="/login"
+               onClick={handleAdminClick} // Use the new handler
+               className="font-normal text-white hover:text-[#A3DDEA] transition-colors"
               >
                 Administração 
               </Typography>

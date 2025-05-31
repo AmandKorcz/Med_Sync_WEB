@@ -1,48 +1,39 @@
 import { useState } from "react";
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
-import Med_1 from "../assets/image/Med_1.jpg";
-import Med_2 from "../assets/image/Med_2.jpg";
-import Popup from "../components/Popup.jsx";
+import AgendamentoPopup from "../components/PopupHorario.jsx"; 
 import DoctorCard from "../components/DoctorCard.jsx";
 import ScheduleCalendar from "../components/ScheduleCalendar.jsx";
+import { useMedical } from '../contexts/MedicalContext.jsx';
 
 function Atendimento() {
+  const { medicos, scheduleAppointment } = useMedical();
   const [showPopup, setShowPopup] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [agendamentoInfo, setAgendamentoInfo] = useState({
-    medico: '',
+    medicoNome: '',
     data: '',
     horario: ''
   });
 
-  const busySlots = [
-    { date: '24/05/2025', time: '08:00' },
-    { date: '24/05/2025', time: '09:20' }
-  ];
+  const doctorsForDisplay = medicos.map(m => ({
+    id: m.id,
+    name: m.nome,
+    shortName: m.nome.split(' ').length > 1 ? m.nome.split(' ')[1] : m.nome,
+    crm: m.crm,
+    specialty: m.especializacao,
+    image: m.image,
+    diasAtendimento: m.diasAtendimento
+  }));
 
-  const doctors = [
-    {
-      id: 1,
-      name: "Dra. Eduarda Do Nascimento",
-      shortName: "Dra. Eduarda",
-      crm: "CRM/SC - 26580",
-      specialty: "Dermatologista",
-      image: Med_2,
-    },
-    {
-      id: 2,
-      name: "Dra. Maria Luana",
-      shortName: "Dra. Maria",
-      crm: "CRM/SC - 25687",
-      specialty: "Pediatra",
-      image: Med_1,
-    }
-  ];
-
-  const handleAgendar = (medico, data, horario) => {
-    setAgendamentoInfo({ medico, data, horario });
+  const handleAgendar = (medicoNome, data, horario) => {
+    setAgendamentoInfo({ medicoNome, data, horario });
     setShowPopup(true);
+  };
+
+  const handleConfirmBooking = (bookingDetails) => {
+    scheduleAppointment(bookingDetails); 
+    setShowPopup(false);
   };
 
   const handleClosePopup = () => setShowPopup(false);
@@ -58,7 +49,7 @@ function Atendimento() {
       <main className="container mx-auto px-4 py-28 mb-16">
         <section className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-[#00565e] mb-4">
-          Profissionais <span className="text-teal-500">MedSync</span>
+            Profissionais <span className="text-teal-500">MedSync</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Agende sua consulta assecando os horários disponiveis de cada especialista!
@@ -66,17 +57,17 @@ function Atendimento() {
         </section>
         {!selectedDoctor ? (
           <section className="flex justify-center mb-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              {doctors.map(doctor => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+              {doctorsForDisplay.map(doctor => (
                 <DoctorCard key={doctor.id} doctor={doctor} onSchedule={handleSelectDoctor} />
               ))}
             </div>
           </section>
         ) : (
           <section className="flex justify-center mb-12">
-            <div className="flex flex-col md:flex-row gap-8">
-              <DoctorCard doctor={selectedDoctor} onSchedule={() => handleAgendar(selectedDoctor.name, 'Data a confirmar', 'Horário a confirmar')} />
-              <ScheduleCalendar doctor={selectedDoctor} onSchedule={handleAgendar} onBack={handleBackToList} busySlots={busySlots} />
+            <div className="flex flex-col md:flex-row gap-8 w-full items-center md:items-start">
+              <DoctorCard doctor={selectedDoctor} onSchedule={() => {}} />
+              <ScheduleCalendar doctor={selectedDoctor} onSchedule={handleAgendar} onBack={handleBackToList} />
             </div>
           </section>
         )}
@@ -89,7 +80,7 @@ function Atendimento() {
           rel="noopener noreferrer"
           className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition duration-300"
           aria-label="Conversar no WhatsApp"
-          
+
         >
           <svg
             className="w-8 h-8"
@@ -102,17 +93,19 @@ function Atendimento() {
         </a>
       </div>
 
-      <Footer />
-
       {showPopup && (
-        <Popup
-          medico={agendamentoInfo.medico}
+        <AgendamentoPopup 
+          isOpen={showPopup}
+          medico={agendamentoInfo.medicoNome}
           data={agendamentoInfo.data}
-          horario={agendamentoInfo.horario}
+          horario={agendamentoInfo.horario} 
           onClose={handleClosePopup}
+          onConfirmBooking={handleConfirmBooking}
         />
       )}
+      <Footer/> 
     </div>
+   
   );
 }
 

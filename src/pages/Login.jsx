@@ -3,11 +3,14 @@ import Header from "../components/header.jsx";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
   const [showPasswordRegister, setShowPasswordRegister] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const navigate = useNavigate();
+
 
   return (
     <main className="bg-gradient-to-br ">
@@ -85,7 +88,7 @@ export default function Login() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                type="submit"
+                onClick={() => navigate('/gerenciamento')}
                 className="w-full px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
               >
                 Entrar

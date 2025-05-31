@@ -26,9 +26,6 @@ function SobreNos() {
                 A MedSync reinventa a experiência em saúde com agendamentos simples e atendimento humanizado
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <button className="bg-white text-[#008E9A] hover:bg-[#DFF3F4] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg">
-                    Agendar Consulta
-                </button>
                 <a
                     href={`${whatsappLink}?text=${whatsappMessage}`}
                     target="_blank"
