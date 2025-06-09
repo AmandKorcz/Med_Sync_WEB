@@ -1,5 +1,3 @@
-const https = require('https');
-const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
 
@@ -18,13 +16,13 @@ const loginRouter = require('./routes/login.js');
 app.use('/', loginRouter);
 
 const registerRouter = require('./routes/login.js');
-app.use('/register', registerRouter);
+app.use('/', registerRouter);
 
 const medicoRouter = require('./routes/medico.js');
-app.use('/medico', medicoRouter);
+app.use('/', medicoRouter);
 
 const consultaRouter = require('./routes/consulta.js');
-app.use('/consultas', consultaRouter);
+app.use('/', consultaRouter);
 
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000")

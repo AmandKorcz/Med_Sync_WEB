@@ -38,7 +38,7 @@ export default function Login() {
         console.log("chegamos aqui?");
         const token = data.token;
           if (!token) {
-            console.log("Token VAZIOOOOOOOO");
+            console.log("Token Vazio?");
           }
         localStorage.setItem("token", token);
         navigate("/gerenciamento")
@@ -63,8 +63,7 @@ export default function Login() {
           nome: registerName,
           email: registerEmail,
           senha: registerSenha,
-        })
-        
+        })  
       });
 
       if (response.status === 201) {
@@ -181,7 +180,7 @@ export default function Login() {
               Cadastre-se
             </h2>
 
-            <form className="space-y-6">
+            <form onSubmit={handleRegister} className="space-y-6">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
