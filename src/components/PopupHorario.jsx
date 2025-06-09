@@ -118,7 +118,7 @@ const AgendamentoPopup = ({ isOpen, onClose, onConfirmBooking, medico, data, hor
       if (observacoes) message += `Observações: ${observacoes}\n`;
 
       const phoneNumber = "5547984747598";
-      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+      window.open(`http://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
       
       setHorario(initialHorario || '');
       setNomeResponsavel('');

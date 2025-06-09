@@ -6,7 +6,7 @@ const Convenio = () => {
   const generateWhatsAppLink = (message) => {
     const phoneNumber = "5547984747598";
     const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    return `http://wa.me/${phoneNumber}?text=${encodedMessage}`;
   };
 
   // Dados dos planos do convênio
@@ -369,7 +369,7 @@ const Convenio = () => {
       
       <div className="fixed bottom-6 right-6 z-50">
         <a
-          href="https://wa.me/5547984747598"
+          href="http://wa.me/5547984747598"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition duration-300"

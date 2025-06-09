@@ -1,7 +1,6 @@
 const connection = require("../database.js");
 const { validationResult } = require('express-validator');
 
-
 //GET - Listando as consultas de um medico 
 exports.listarConsultasPorMedico = (req, res) => {
     const {id_medico} = req.params;

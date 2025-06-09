@@ -11,7 +11,7 @@ function loginUsuario(){
         {type: 'password', name: 'senha', message: 'Digite a senha: '}
     ]).then(async answers => {
         try {
-            const response = await axios.post('http://localhost:3000/login/login', {
+            const response = await axios.post('http://localhost:3000/login', {
                 email: answers.email,
                 senha: answers.senha
             });

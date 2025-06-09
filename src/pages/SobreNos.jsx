@@ -6,7 +6,7 @@ import { FaCalendarAlt, FaUserClock, FaShieldAlt, FaUserMd, FaHeartbeat, FaClini
 
 function SobreNos() {
     const phoneNumber = "5547984747598";
-    const whatsappLink = `https://wa.me/${phoneNumber}`;
+    const whatsappLink = `http://wa.me/${phoneNumber}`;
     const whatsappMessage = encodeURIComponent("Olá, gostaria de mais informações sobre a MedSync!");
 
     return (
@@ -146,7 +146,7 @@ function SobreNos() {
 
         <div className="fixed bottom-6 right-6 z-50">
         <a
-          href="https://wa.me/5547984747598"
+          href="http://wa.me/5547984747598"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition duration-300"

@@ -9,8 +9,78 @@ export default function Login() {
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
   const [showPasswordRegister, setShowPasswordRegister] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginSenha, setLoginSenha] = useState("");
+
+  const [registerName, setRegisterName] = useState("");
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerSenha, setRegisterSenha] = useState("");
+
   const navigate = useNavigate();
 
+  //Função de login 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          email: loginEmail,
+          senha: loginSenha
+        })
+      });
+
+      const data = await response.json;
+
+      if(response.status === 200){
+        console.log("chegamos aqui?");
+        const token = data.token;
+          if (!token) {
+            console.log("Token VAZIOOOOOOOO");
+          }
+        localStorage.setItem("token", token);
+        navigate("/gerenciamento")
+      } else {
+        alert("Erro ao fazer login");
+      }
+    } catch (error) {
+      alert("Erro ao fazer login: " + (error.response?.data?.message || error.message));
+    }
+  };
+
+  //Função de registro 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if(!acceptedTerms) return;
+
+    try{
+      const response = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          nome: registerName,
+          email: registerEmail,
+          senha: registerSenha,
+        })
+        
+      });
+
+      if (response.status === 201) {
+        alert("Cadastro realizado com sucesso");
+        //Limpando os campos de login após o login bem-sucedido
+        setRegisterName("");
+        setRegisterEmail("");
+        setRegisterSenha("");
+        setAcceptedTerms(false);
+      } else {
+        alert("Erro no cadastro");
+      }
+    } catch (error) {
+      alert("Erro ao cadastrar: " + (error.response?.data?.message || error.message));
+    };
+  }
 
   return (
     <main className="bg-gradient-to-br ">
@@ -46,6 +116,8 @@ export default function Login() {
                 <input
                   type="email"
                   placeholder="Digite seu email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
                   className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200"
                 />
               </motion.div>
@@ -62,6 +134,8 @@ export default function Login() {
                 <input
                   type={showPasswordLogin ? "text" : "password"}
                   placeholder="Digite sua senha"
+                  value={loginSenha}
+                  onChange={(e) => setLoginSenha(e.target.value)}
                   className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200"
                 />
                 <motion.div
@@ -88,7 +162,7 @@ export default function Login() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => navigate('/gerenciamento')}
+                onClick={handleLogin}
                 className="w-full px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
               >
                 Entrar
@@ -119,6 +193,8 @@ export default function Login() {
                 <input
                   type="text"
                   placeholder="Digite seu nome"
+                  value={registerName}
+                  onChange={(e) => setRegisterName(e.target.value)}
                   className="w-full px-4 py-3 bg-white/90 border border-white/50 rounded-xl placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-all duration-200"
                 />
               </motion.div>
@@ -134,6 +210,8 @@ export default function Login() {
                 <input
                   type="email"
                   placeholder="Digite seu email"
+                  value={registerEmail}
+                  onChange={(e) => setRegisterEmail(e.target.value)}
                   className="w-full px-4 py-3 bg-white/90 border border-white/50 rounded-xl placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-all duration-200"
                 />
               </motion.div>
@@ -150,6 +228,8 @@ export default function Login() {
                 <input
                   type={showPasswordRegister ? "text" : "password"}
                   placeholder="Crie uma senha"
+                  value={registerSenha}
+                  onChange={(e) => setRegisterSenha(e.target.value)}
                   className="w-full px-4 py-3 bg-white/90 border border-white/50 rounded-xl placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-all duration-200"
                 />
                 <motion.div
