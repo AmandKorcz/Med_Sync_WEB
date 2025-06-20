@@ -18,8 +18,8 @@ app.use('/', loginRouter);
 const registerRouter = require('./routes/login.js');
 app.use('/', registerRouter);
 
-const medicoRouter = require('./routes/medico.js');
-app.use('/', medicoRouter);
+const criarMedicoRouter = require('./routes/medico.js');
+app.use('/', criarMedicoRouter);
 
 const consultaRouter = require('./routes/consulta.js');
 app.use('/', consultaRouter);

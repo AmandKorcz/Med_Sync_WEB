@@ -32,7 +32,7 @@ export default function Login() {
         })
       });
 
-      const data = await response.json;
+      const data = await response.json();
 
       if(response.status === 200){
         console.log("chegamos aqui?");
@@ -46,7 +46,7 @@ export default function Login() {
         alert("Erro ao fazer login");
       }
     } catch (error) {
-      alert("Erro ao fazer login: " + (error.response?.data?.message || error.message));
+      alert("Erro ao fazer login: " + error.message);
     }
   };
 
@@ -77,7 +77,7 @@ export default function Login() {
         alert("Erro no cadastro");
       }
     } catch (error) {
-      alert("Erro ao cadastrar: " + (error.response?.data?.message || error.message));
+      alert("Erro ao cadastrar: " + error.message);
     };
   }
 

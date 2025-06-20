@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useEffect } from 'react'; 
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
 import PopupHorario from "../components/PopupHorario.jsx";
@@ -7,174 +8,226 @@ import { useMedical } from '../contexts/MedicalContext.jsx';
 import { generateTimeSlots } from '../assets/Utils/scheduleUtils.js';
 
 function Gerenciamento() {
-  const {
-    medicos,
-    addMedico,
-    updateMedico,
-    deleteMedico,
-    deleteHorario,
-    updatePacienteInHorario,
-    addHorario,
-    addDiaAtendimento
-  } = useMedical();
-
-  const [showPopup, setShowPopup] = useState(false); 
-  const [showAddDayPopup, setShowAddDayPopup] = useState(false); 
-  const [currentMedicoId, setCurrentMedicoId] = useState(null);
-  const [currentDiaIndex, setCurrentDiaIndex] = useState(null); 
-  const [dayToAdd, setDayToAdd] = useState({ date: '', weekday: '' }); 
-
-  const [editandoMedico, setEditandoMedico] = useState(null);
-  const [mostrarFormMedico, setMostrarFormMedico] = useState(false);
-
-  const [formMedico, setFormMedico] = useState({
-    nome: "",
-    crm: "",
-    especializacao: "",
-    notas: "",
-    image: ""
-  });
-  const [erros, setErros] = useState({
-    nome: "",
-    crm: "",
-    especializacao: ""
-  });
-
+  const [medicos, setMedicos] = useState([]);
   const [filtro, setFiltro] = useState("");
 
-  const handleAddOrUpdateMedico = () => {
-    const novosErros = {};
-    let valido = true;
+  const [medicoNome, setMedicoNome] = useState("");
+  const [medicoCRM, setMedicoCRM] = useState("");
+  const [medicoEspecializacao, setMedicoEspecializacao] = useState("");
+  const [medicoNotas, setMedicoNotas] = useState("");
 
-    if (!formMedico.nome.trim()) {
+  const [mostrarFormMedico, setMostrarFormMedico] = useState(false);
+
+  const [editandoMedico, setEditandoMedico] = useState(null);
+  const [erros, setErros] = useState({ nome: "", crm: "", especializacao: "" });
+  const [showPopup, setShowPopup] = useState(false);
+  const [showAddDayPopup, setShowAddDayPopup] = useState(false);
+  const [diaSelecionado, setDiaSelecionado] = useState(null);
+  const [medicoSelecionadoId, setMedicoSelecionadoId] = useState(null);
+  const [dayToAdd, setDayToAdd] = useState({ dia: "", data: "" });
+
+  const medicosFiltrados = medicos.filter(m => m.nome.toLowerCase().includes(filtro.toLowerCase()));
+
+  const handleAddPaciente = (medicoId, diaIndex, horarioIndex, nomePaciente) => {
+    setMedicos((prev) => prev.map(m => {
+      if (m.id !== medicoId) return m;
+      const novosDias = [...m.diasAtendimento];
+      const novosHorarios = [...novosDias[diaIndex].horarios];
+      novosHorarios[horarioIndex].paciente = nomePaciente || null;
+      novosDias[diaIndex].horarios = novosHorarios;
+      return { ...m, diasAtendimento: novosDias };
+    }));
+  };
+
+  const handleDeleteHorario = (medicoId, diaIndex, horarioId) => {
+    setMedicos((prev) => prev.map(m => {
+      if (m.id !== medicoId) return m;
+      const novosDias = [...m.diasAtendimento];
+      novosDias[diaIndex].horarios = novosDias[diaIndex].horarios.filter(h => h.id !== horarioId);
+      return { ...m, diasAtendimento: novosDias };
+    }));
+  };
+
+  const openPopupHorario = (medicoId, diaIndex) => {
+    setMedicoSelecionadoId(medicoId);
+    setDiaSelecionado(diaIndex);
+    setShowPopup(true);
+  };
+
+  const handleConfirmarHorario = (novoHorario) => {
+    if (medicoSelecionadoId === null || diaSelecionado === null) return;
+    setMedicos((prev) => prev.map(m => {
+      if (m.id !== medicoSelecionadoId) return m;
+      const novosDias = [...m.diasAtendimento];
+      const novoHorarioObj = { id: Date.now(), hora: novoHorario, paciente: "", status: "" };
+      novosDias[diaSelecionado].horarios.push(novoHorarioObj);
+      return { ...m, diasAtendimento: novosDias };
+    }));
+    setShowPopup(false);
+  };
+
+  const handleAddStandardHours = (medicoId, diaIndex) => {
+    const horariosPadrao = ["08:00", "09:00", "10:00", "11:00", "14:00", "15:00", "16:00"];
+    setMedicos((prev) => prev.map(m => {
+      if (m.id !== medicoId) return m;
+      const novosDias = [...m.diasAtendimento];
+      const horariosExistentes = novosDias[diaIndex].horarios.map(h => h.hora);
+      horariosPadrao.forEach(horario => {
+        if (!horariosExistentes.includes(horario)) {
+          novosDias[diaIndex].horarios.push({ id: Date.now() + Math.random(), hora: horario, paciente: "", status: "" });
+        }
+      });
+      return { ...m, diasAtendimento: novosDias };
+    }));
+  };
+
+  const handleAddDiaAtendimentoClick = (medicoId) => {
+    setMedicoSelecionadoId(medicoId);
+    setShowAddDayPopup(true);
+    setDayToAdd({ dia: "", data: "" });
+  };
+
+  const handleConfirmAddDay = (novoDia) => {
+    if (!novoDia.dia || !novoDia.data || medicoSelecionadoId === null) return;
+    setMedicos((prev) => prev.map(m => {
+      if (m.id !== medicoSelecionadoId) return m;
+      const novosDias = [...m.diasAtendimento, { dia: novoDia.dia, data: novoDia.data, horarios: [] }];
+      return { ...m, diasAtendimento: novosDias };
+    }));
+    setShowAddDayPopup(false);
+  };
+
+  const handleAddOrUpdateMedico = async () => {
+    let valid = true;
+    const novosErros = { nome: "", crm: "", especializacao: "", notas: "" };
+    if (!medicoNome.trim()) {
       novosErros.nome = "Nome é obrigatório";
-      valido = false;
+      valid = false;
     }
-
-    if (!formMedico.crm.trim()) {
+    if (!medicoCRM.trim()) {
       novosErros.crm = "CRM é obrigatório";
-      valido = false;
+      valid = false;
     }
-
-    if (!formMedico.especializacao.trim()) {
+    if (!medicoEspecializacao.trim()) {
       novosErros.especializacao = "Especialização é obrigatória";
-      valido = false;
+      valid = false;
+    }
+    if (!valid) {
+      setErros(novosErros);
+      return;
     }
 
-    setErros(novosErros);
+    try {
+      if (editandoMedico !== null) {
+        // Atualizar médico existente (PUT)
+        const token = localStorage.getItem('token'); 
+        const response = await fetch(`http://localhost:3000/editMedico/${editandoMedico}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            nome: medicoNome,
+            crm: medicoCRM,
+            especializacao: medicoEspecializacao,
+            notas: medicoNotas
+          })
+        });
 
-    if (valido) {
-      if (editandoMedico) {
-        updateMedico({ ...editandoMedico, ...formMedico });
+        if (!response.ok) throw new Error("Erro ao atualizar médico");
+
+        const medicoAtualizado = await response.json();
+
+        setMedicos(prev =>
+          prev.map(m =>
+            m.id === editandoMedico
+              ? { ...medicoAtualizado, diasAtendimento: m.diasAtendimento || [] }
+              : m
+          )
+        );
       } else {
-        addMedico({ ...formMedico, diasAtendimento: [] });
+        // Criar novo médico (POST)
+        const token = localStorage.getItem('token'); 
+        const response = await fetch("http://localhost:3000/criarMedico", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            nome: medicoNome,
+            crm: medicoCRM,
+            especializacao: medicoEspecializacao,
+            notas: medicoNotas
+          })
+        });
+
+        if (!response.ok) throw new Error("Erro ao criar médico");
+
+        const novoMedico = await response.json();
+
+        setMedicos(prev => [...prev, { ...novoMedico, diasAtendimento: [] }]);
+        setMostrarFormMedico(false); 
+
+        // Limpa os campos
+        setMedicoNome("");
+        setMedicoCRM("");
+        setMedicoEspecializacao("");
+        setMedicoNotas("");
+        setErros({ nome: "", crm: "", especializacao: "" });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      setFormMedico({ nome: "", crm: "", especializacao: "", notas: "", image: "" });
-      setEditandoMedico(null);
-      setMostrarFormMedico(false);
+    } catch (error) {
+      console.error("Erro:", error);
+      alert("Ocorreu um erro ao salvar o médico.");
     }
   };
 
   const handleEditMedico = (medico) => {
-    setFormMedico({
-      nome: medico.nome,
-      crm: medico.crm,
-      especializacao: medico.especializacao,
-      notas: medico.notas || "",
-      image: medico.image || ""
-    });
-    setEditandoMedico(medico);
+    setMedicoNome(medico.nome);
+    setMedicoCRM(medico.crm);
+    setMedicoEspecializacao(medico.especializacao);
+    setMedicoNotas(medico.notas || "");
+    setEditandoMedico(medico.id);
     setMostrarFormMedico(true);
   };
 
-  const handleDeleteMedico = (medicoId) => {
-    deleteMedico(medicoId);
+  const handleDeleteMedico = (id) => {
+    setMedicos(prev => prev.filter(m => m.id !== id));
   };
 
-  const handleDeleteHorario = (medicoId, diaIndex, horarioId) => {
-    deleteHorario(medicoId, diaIndex, horarioId);
-  };
+  useEffect(() => {
+    async function fetchMedicos() {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch('http://localhost:3000/getMedico', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        });
 
-  const handleAddPaciente = (medicoId, diaIndex, horarioIndex, nome) => {
-    updatePacienteInHorario(medicoId, diaIndex, horarioIndex, nome);
-  };
+        if (!response.ok) throw new Error('Erro ao buscar médicos');
 
-  const handleAddHorario = (medicoId, diaIndex, novaHora) => {
-    addHorario(medicoId, diaIndex, novaHora);
-  };
-
-  const openPopupHorario = (medicoId, diaIndex) => {
-    setCurrentMedicoId(medicoId);
-    setCurrentDiaIndex(diaIndex);
-    setShowPopup(true);
-  };
-
-  const handleConfirmarHorario = (horario) => {
-    handleAddHorario(currentMedicoId, currentDiaIndex, horario);
-  };
-
-  const handleAddDiaAtendimentoClick = (medicoId) => {
-    setCurrentMedicoId(medicoId);
-    setShowAddDayPopup(true);
-    setDayToAdd({ date: '', weekday: '' }); 
-  };
-
-  const handleConfirmAddDay = () => {
-    if (!dayToAdd.date || !dayToAdd.weekday) {
-      alert("Por favor, selecione a data e o dia da semana.");
-      return;
-    }
-    addDiaAtendimento(currentMedicoId, dayToAdd.weekday, dayToAdd.date);
-    setShowAddDayPopup(false);
-  };
-
-  const handleAddStandardHours = (medicoId, diaIndex) => {
-    const standardSlots = generateTimeSlots();
-    standardSlots.forEach(hora => {
-      // Verifica se o horário já existe antes de adicionar para evitar duplicatas
-      const medico = medicos.find(m => m.id === medicoId);
-      const dia = medico?.diasAtendimento[diaIndex];
-      const horarioExists = dia?.horarios.some(h => h.hora === hora);
-
-      if (!horarioExists) {
-        addHorario(medicoId, diaIndex, hora);
+        const data = await response.json();
+        const medicosFormatados = data.map(m => ({
+          ...m,
+          id: m.id_medico,
+          diasAtendimento: [],
+        }));
+        setMedicos(medicosFormatados);
+      } catch (error) {
+        console.error('Erro ao buscar médicos:', error);
       }
-    });
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormMedico({ ...formMedico, image: reader.result });
-      };
-      reader.readAsDataURL(file);
     }
-  };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+    fetchMedicos();
+  }, []);
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormMedico({ ...formMedico, image: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const medicosFiltrados = medicos.filter(medico =>
-    medico.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-    medico.crm.toLowerCase().includes(filtro.toLowerCase()) ||
-    medico.especializacao.toLowerCase().includes(filtro.toLowerCase())
-  );
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -211,7 +264,10 @@ function Gerenciamento() {
               </div>
               <button
                 onClick={() => {
-                  setFormMedico({ nome: "", crm: "", especializacao: "", notas: "", image: "" });
+                  setMedicoNome("");
+                  setMedicoCRM("");
+                  setMedicoEspecializacao("");
+                  setMedicoNotas("");
                   setEditandoMedico(null);
                   setMostrarFormMedico(true);
                 }}
@@ -233,10 +289,10 @@ function Gerenciamento() {
                   <input
                     type="text"
                     className={`w-full border ${erros.nome ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
-                    value={formMedico.nome}
+                    value={medicoNome}
                     onChange={(e) => {
-                      setFormMedico({...formMedico, nome: e.target.value});
-                      setErros({...erros, nome: ""});
+                      setMedicoNome(e.target.value);
+                      setErros({ ...erros, nome: "" });
                     }}
                   />
                   {erros.nome && <p className="text-red-500 text-xs mt-1">{erros.nome}</p>}
@@ -247,10 +303,10 @@ function Gerenciamento() {
                   <input
                     type="text"
                     className={`w-full border ${erros.crm ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
-                    value={formMedico.crm}
+                    value={medicoCRM}
                     onChange={(e) => {
-                      setFormMedico({...formMedico, crm: e.target.value});
-                      setErros({...erros, crm: ""});
+                      setMedicoCRM(e.target.value);
+                      setErros({ ...erros, crm: "" });
                     }}
                   />
                   {erros.crm && <p className="text-red-500 text-xs mt-1">{erros.crm}</p>}
@@ -261,42 +317,13 @@ function Gerenciamento() {
                   <input
                     type="text"
                     className={`w-full border ${erros.especializacao ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
-                    value={formMedico.especializacao}
+                    value={medicoEspecializacao}
                     onChange={(e) => {
-                      setFormMedico({...formMedico, especializacao: e.target.value});
-                      setErros({...erros, especializacao: ""});
+                      setMedicoEspecializacao(e.target.value);
+                      setErros({ ...erros, especializacao: "" });
                     }}
                   />
                   {erros.especializacao && <p className="text-red-500 text-xs mt-1">{erros.especializacao}</p>}
-                </div>
-
-                <div className="md:col-span-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Foto do Médico</label>
-                  <div
-                    className="flex items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-                    onDragOver={handleDragOver}
-                    onDrop={handleDrop}
-                    onClick={() => document.getElementById('file-upload-input').click()}
-                  >
-                    <input
-                      id="file-upload-input"
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                    />
-                    {formMedico.image ? (
-                      <img src={formMedico.image} alt="Pré-visualização" className="h-full w-full object-cover rounded-lg" />
-                    ) : (
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L7 9m3-3 3 3"/>
-                          </svg>
-                          <p className="mb-2 text-sm text-gray-500 dark:text-gray-400 text-center"><span className="font-semibold">Clique para fazer upload</span> ou arraste e solte</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG ou GIF (MAX. 800x400px)</p>
-                      </div>
-                    )}
-                  </div>
                 </div>
 
                 <div className="md:col-span-1">
@@ -304,8 +331,8 @@ function Gerenciamento() {
                   <textarea
                     className="w-full border border-gray-300 rounded px-3 py-2"
                     rows="2"
-                    value={formMedico.notas}
-                    onChange={(e) => setFormMedico({...formMedico, notas: e.target.value})}
+                    value={medicoNotas}
+                    onChange={(e) => setMedicoNotas(e.target.value)}
                   />
                 </div>
               </div>
@@ -315,7 +342,10 @@ function Gerenciamento() {
                   onClick={() => {
                     setMostrarFormMedico(false);
                     setEditandoMedico(null);
-                    setFormMedico({ nome: "", crm: "", especializacao: "", notas: "", image: "" });
+                    setMedicoNome("");
+                    setMedicoCRM("");
+                    setMedicoEspecializacao("");
+                    setMedicoNotas("");
                     setErros({ nome: "", crm: "", especializacao: "" });
                   }}
                   className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg transition duration-200"
@@ -372,7 +402,7 @@ function Gerenciamento() {
                 </div>
 
                 <div className="p-4 sm:p-6">
-                  {medico.diasAtendimento.map((dia, diaIndex) => (
+                  {(medico.diasAtendimento || []).map((dia, diaIndex) => (
                     <div key={`${medico.id}-${diaIndex}`} className="mb-6 last:mb-0 border-b pb-4 last:border-b-0">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
                         <h3 className="text-lg font-semibold text-gray-800">
