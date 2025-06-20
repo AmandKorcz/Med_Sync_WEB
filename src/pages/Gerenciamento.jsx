@@ -18,6 +18,10 @@ function Gerenciamento() {
 
   const [mostrarFormMedico, setMostrarFormMedico] = useState(false);
 
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [medicoParaDeletar, setMedicoParaDeletar] = useState(null);
+
+
   const [editandoMedico, setEditandoMedico] = useState(null);
   const [erros, setErros] = useState({ nome: "", crm: "", especializacao: "" });
   const [showPopup, setShowPopup] = useState(false);
@@ -26,7 +30,7 @@ function Gerenciamento() {
   const [medicoSelecionadoId, setMedicoSelecionadoId] = useState(null);
   const [dayToAdd, setDayToAdd] = useState({ dia: "", data: "" });
 
-  const medicosFiltrados = medicos.filter(m => m.nome.toLowerCase().includes(filtro.toLowerCase()));
+  const medicosFiltrados = medicos.filter(m => m?.nome?.toLowerCase().includes(filtro.toLowerCase()));
 
   const handleAddPaciente = (medicoId, diaIndex, horarioIndex, nomePaciente) => {
     setMedicos((prev) => prev.map(m => {
@@ -97,6 +101,12 @@ function Gerenciamento() {
     setShowAddDayPopup(false);
   };
 
+  const abrirConfirmDelete = (medico) => {
+    setMedicoParaDeletar(medico);
+    setShowConfirmDelete(true);
+  };
+
+
   const handleAddOrUpdateMedico = async () => {
     let valid = true;
     const novosErros = { nome: "", crm: "", especializacao: "", notas: "" };
@@ -146,6 +156,17 @@ function Gerenciamento() {
               : m
           )
         );
+
+        await fetchMedicos();
+        setMostrarFormMedico(false);
+        setEditandoMedico(null);
+        setMedicoNome("");
+        setMedicoCRM("");
+        setMedicoEspecializacao("");
+        setMedicoNotas("");
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
       } else {
         // Criar novo médico (POST)
         const token = localStorage.getItem('token'); 
@@ -170,7 +191,7 @@ function Gerenciamento() {
         setMedicos(prev => [...prev, { ...novoMedico, diasAtendimento: [] }]);
         setMostrarFormMedico(false); 
 
-        // Limpa os campos
+        await fetchMedicos();
         setMedicoNome("");
         setMedicoCRM("");
         setMedicoEspecializacao("");
@@ -195,36 +216,56 @@ function Gerenciamento() {
     setMostrarFormMedico(true);
   };
 
-  const handleDeleteMedico = (id) => {
-    setMedicos(prev => prev.filter(m => m.id !== id));
+  const handleDeleteMedico = async () => {
+    if (!medicoParaDeletar) return;
+
+    try{
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3000/deleteMedico/${medicoParaDeletar.id}`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Erro ao deletar médico');
+
+      setMedicos(prev => prev.filter(m => m.id !== medicoParaDeletar.id));
+      setShowConfirmDelete(false);
+      setMedicoParaDeletar(null);
+    } catch (error) {
+      console.error("Erro ao deletar médico: ", error);
+      alert("Não foi possível deletar o médico");
+    }
   };
 
-  useEffect(() => {
-    async function fetchMedicos() {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch('http://localhost:3000/getMedico', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        });
+  async function fetchMedicos() {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch('http://localhost:3000/getMedico', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
 
-        if (!response.ok) throw new Error('Erro ao buscar médicos');
+      if (!response.ok) throw new Error('Erro ao buscar médicos');
 
-        const data = await response.json();
-        const medicosFormatados = data.map(m => ({
-          ...m,
-          id: m.id_medico,
-          diasAtendimento: [],
-        }));
-        setMedicos(medicosFormatados);
-      } catch (error) {
-        console.error('Erro ao buscar médicos:', error);
-      }
+      const data = await response.json();
+      const medicosFormatados = data.map(m => ({
+        ...m,
+        id: m.id_medico,
+        diasAtendimento: [],
+      }));
+      setMedicos(medicosFormatados);
+    } catch (error) {
+      console.error('Erro ao buscar médicos:', error);
     }
+  }
 
+  useEffect(() => {
     fetchMedicos();
   }, []);
 
@@ -250,7 +291,7 @@ function Gerenciamento() {
 
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#00565e]">Gestão de Horários Médicos</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#00565e]">Gestão de Horários | Médicos</h1>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
               <div className="w-full">
@@ -382,7 +423,7 @@ function Gerenciamento() {
                         </svg>
                       </button>
                       <button
-                        onClick={() => handleDeleteMedico(medico.id)}
+                        onClick={() => abrirConfirmDelete(medico)}
                         className="bg-white text-red-500 px-3 py-1 rounded text-sm font-medium hover:bg-gray-100"
                         title="Remover médico"
                       >
@@ -400,6 +441,33 @@ function Gerenciamento() {
                     </div>
                   </div>
                 </div>
+
+                {showConfirmDelete && (
+                  <div className="fixed inset-0 bg-white bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg">
+                      <h3 className="text-lg font-semibold mb-4 text-gray-900">Confirmar exclusão</h3>
+                        <p className="mb-6">Tem certeza que deseja remover o médico <strong>{medicoParaDeletar?.nome}</strong>?</p>
+                          <div className="flex justify-end gap-4">
+                            <button
+                              onClick={() => {
+                                setShowConfirmDelete(false);
+                                setMedicoParaDeletar(null);
+                              }}
+                              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                            >
+                              Cancelar
+                            </button>
+                            <button
+                              onClick={handleDeleteMedico}
+                              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                            >
+                              Deletar
+                            </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
 
                 <div className="p-4 sm:p-6">
                   {(medico.diasAtendimento || []).map((dia, diaIndex) => (

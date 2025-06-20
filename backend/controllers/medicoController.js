@@ -17,15 +17,15 @@ exports.criarMedico = async (req, res) => {
         return res.status(400).json({erros : erros.array()});
     }
 
-    const { nome, crm, especializacao } = req.body;
+    const { nome, crm, especializacao, notas } = req.body;
     if (!nome || !crm || !especializacao) {
         return res.status(400).json({ message: "Nome, CRM e especialização são obrigatórios" });
     }
-    console.log('Dados recebidos: ', {nome, crm, especializacao});
+    console.log('Dados recebidos: ', {nome, crm, especializacao, notas});
     
     connection.query(
-        "INSERT INTO medico (nome, crm, especializacao) VALUES (?, ?, ?)",
-        [nome, crm, especializacao],
+        "INSERT INTO medico (nome, crm, especializacao, notas) VALUES (?, ?, ?, ?)",
+        [nome, crm, especializacao, notas],
         (err, results) => {
             if (err) {
                 console.log("Erro ao criar novo médico, ", err);
@@ -43,11 +43,11 @@ exports.criarMedico = async (req, res) => {
 // PUT - Atualizar médico
 exports.atualizarMedico = (req, res) => {
     const { id } = req.params;
-    const { nome, crm, especializacao } = req.body;
+    const { nome, crm, especializacao, notas} = req.body;
 
-    console.log("Dados recebidos: ", {id, nome, crm, especializacao});
+    console.log("Dados recebidos: ", {id, nome, crm, especializacao, notas});
 
-    connection.query( "UPDATE medico SET nome = ?, crm = ?, especializacao = ? WHERE id_medico = ?", [nome, crm, especializacao, id], (err, results) => {
+    connection.query( "UPDATE medico SET nome = ?, crm = ?, especializacao = ?, notas = ? WHERE id_medico = ?", [nome, crm, especializacao, notas, id], (err, results) => {
         if (err) return res.status(500).json({ erro: err });
         if (results.affectedRows === 0) return res.status(404).json({ message: 'Médico não encontrado' });
         res.status(200).json({ message: 'Médico atualizado com sucesso!' });
