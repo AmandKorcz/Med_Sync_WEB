@@ -50,7 +50,14 @@ export default function NewDayPopup({ isOpen, onClose, onConfirm, setDayToAdd })
       setError('Por favor, selecione uma data.');
       return;
     }
-    onConfirm();
+
+    const formattedDate = formatDate(selectedDate);
+    const weekdayName = getWeekdayName(selectedDate);
+
+    onConfirm({
+      dia: weekdayName,
+      data: formattedDate,
+    });
   };
 
   return (

@@ -24,6 +24,9 @@ app.use('/', criarMedicoRouter);
 const consultaRouter = require('./routes/consulta.js');
 app.use('/', consultaRouter);
 
+const diaRouter = require('./routes/dia_atendimento.js');
+app.use('/', diaRouter);
+
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000")
 })

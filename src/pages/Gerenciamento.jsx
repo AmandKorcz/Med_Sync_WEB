@@ -6,10 +6,12 @@ import PopupHorario from "../components/PopupHorario.jsx";
 import NewDayPopup from "../components/NewDayPopup.jsx";
 import { useMedical } from '../contexts/MedicalContext.jsx';
 import { generateTimeSlots } from '../assets/Utils/scheduleUtils.js';
+import { data } from 'react-router-dom';
 
 function Gerenciamento() {
   const [medicos, setMedicos] = useState([]);
   const [filtro, setFiltro] = useState("");
+  const [consultas, setConsultas] = useState([]);
 
   const [medicoNome, setMedicoNome] = useState("");
   const [medicoCRM, setMedicoCRM] = useState("");
@@ -17,43 +19,176 @@ function Gerenciamento() {
   const [medicoNotas, setMedicoNotas] = useState("");
 
   const [mostrarFormMedico, setMostrarFormMedico] = useState(false);
-
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [medicoParaDeletar, setMedicoParaDeletar] = useState(null);
-
-
+  const medicosFiltrados = medicos.filter(m => m?.nome?.toLowerCase().includes(filtro.toLowerCase()));
   const [editandoMedico, setEditandoMedico] = useState(null);
-  const [erros, setErros] = useState({ nome: "", crm: "", especializacao: "" });
+  const [errosMedico, setErrosMedico] = useState({ nome: "", crm: "", especializacao: "" });
+
+  const [medicoConsulta, setMedicoConsulta] = useState("");
+  const [dataConsulta, setDataConsulta] = useState("");
+  const [horaConsulta, setHoraConsulta] = useState("");
+  const [nomePaciente, setNomePaciente] = useState("");
+  const [obsConsulta, setObsConsulta] = useState("");
+
+  const [editandoConsulta, setEditandoConsulta] = useState(null);
+  const [errosConsulta, setErrosConsulta] = useState({ id_medico: "", data: "", hora: "", paciente: "", obs: ""});
+  const [mostrarFormConsulta, setMostrarFormConsulta] = useState(false);
+  const [consultaParaDeletar, setConsultaParaDeletar] = useState(null);
+
   const [showPopup, setShowPopup] = useState(false);
   const [showAddDayPopup, setShowAddDayPopup] = useState(false);
   const [diaSelecionado, setDiaSelecionado] = useState(null);
   const [medicoSelecionadoId, setMedicoSelecionadoId] = useState(null);
-  const [dayToAdd, setDayToAdd] = useState({ dia: "", data: "" });
+  const [dayToAdd, setDayToAdd] = useState(null); 
+  const [showConfirmDeleteDay, setShowConfirmDeleteDay] = useState(false);
+  const [dayToDelete, setDayToDelete] = useState(null);
 
-  const medicosFiltrados = medicos.filter(m => m?.nome?.toLowerCase().includes(filtro.toLowerCase()));
+  const handleAddConsulta = async () => {
+    let valid = true;
+    const novosErros = {id_medico: "", data: "", hora: "", paciente: "", obs: ""};
+    if (!medicoConsulta.trim()){
+      novosErros.data = "Médico é obrigatório";
+      valid = false;
+    }
+    if (!dataConsulta.trim()) {
+      novosErros.data = "Data da consulta é obrigatória";
+      valid = false;
+    }
+    if (!horaConsulta.trim()){
+      novosErros.hora = "Hora da consulta é obrigatória";
+      valid = false;
+    }
+    if (!nomePaciente.trim()) {
+      novosErros.paciente = "Nome do paciente é obrigatório";
+      valid = false;
+    }
+    if (!valid) {
+      setErrosConsulta(novosErros);
+      return;
+    }
 
-  const handleAddPaciente = (medicoId, diaIndex, horarioIndex, nomePaciente) => {
-    setMedicos((prev) => prev.map(m => {
-      if (m.id !== medicoId) return m;
-      const novosDias = [...m.diasAtendimento];
-      const novosHorarios = [...novosDias[diaIndex].horarios];
-      novosHorarios[horarioIndex].paciente = nomePaciente || null;
-      novosDias[diaIndex].horarios = novosHorarios;
-      return { ...m, diasAtendimento: novosDias };
-    }));
+    try {
+      if (editandoConsulta !== null) {
+        //Atualizando consulta existente (PUT)
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/editConsulta/${editandoConsulta}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            id_medico: medicoSelecionadoId,
+            data: dataConsulta,
+            hora: horaConsulta,
+            paciente: nomePaciente,
+            obs: obsConsulta
+          })
+        });
+
+        if (!response.ok) throw new Error("Erro ao atualizar a consulta");
+
+        const consultaAtualizada = await response.json();
+
+        setConsultas (prev => 
+          prev.map(m =>
+            m.id === editandoConsulta
+            ? { ...consultaAtualizada, diasAtendimento: m.diasAtendimento || [] }
+            : m
+          )
+        );
+
+        await fetchConsultas();
+        setMostrarFormConsulta(false);
+        setEditandoConsulta(null);
+        setMedicoConsulta("");
+        setDataConsulta("");
+        setHoraConsulta("");
+        setNomePaciente("");
+        setObsConsulta("");
+
+        window.scrollTo({ top: 0, behavior: 'smooth'});
+      } else {
+        //Criar nova consulta (POST)
+        const token = localStorage.getItem('token');
+        const response = await fetch("http://localhost:3000/criarConsulta", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            id_medico: medicoSelecionadoId,
+            hora: horaConsulta,
+            data: dataConsulta,
+            paciente: nomePaciente,
+            obs: obsConsulta
+          })
+        });
+
+        if (!response.ok) throw new Error("Erro ao criar consulta");
+
+        const novaConsulta = await response.json();
+
+        setConsultas(prev => [...prev, { ...novaConsulta, diasAtendimento: [] }]);
+        setMostrarFormConsulta(false);
+
+        await fetchConsultas();
+        setMedicoConsulta("");
+        setDataConsulta("");
+        setHoraConsulta("");
+        setNomePaciente("");
+        setObsConsulta("");
+        setErrosConsulta({ data: "", hora: "", paciente: "", obs: ""});
+
+        window.scrollTo({ top: 0, behavior: 'smooth'});
+      }
+    } catch (error) {
+      console.error("Erro: ", error);
+      alert("Ocorreu um erro ao salvar a consulta.");
+    }
   };
 
-  const handleDeleteHorario = (medicoId, diaIndex, horarioId) => {
-    setMedicos((prev) => prev.map(m => {
-      if (m.id !== medicoId) return m;
-      const novosDias = [...m.diasAtendimento];
-      novosDias[diaIndex].horarios = novosDias[diaIndex].horarios.filter(h => h.id !== horarioId);
-      return { ...m, diasAtendimento: novosDias };
-    }));
-  };
+  const handleEditConsulta = (consulta) => {
+    setMedicoConsulta(consulta.id_medico);
+    setDataConsulta(consulta.data);
+    setHoraConsulta(consulta.hora);
+    setNomePaciente(consulta.paciente);
+    setObsConsulta(consulta.obs || "");
+    setEditandoConsulta(consulta.id);
+    setMostrarFormConsulta(true);
+  }
 
-  const openPopupHorario = (medicoId, diaIndex) => {
-    setMedicoSelecionadoId(medicoId);
+  const handleDeleteConsulta = async () => {
+    if (!consultaParaDeletar) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3000/deleteConsulta/${consultaParaDeletar}`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Erro ao deletar consulta');
+
+      setShowConfirmDelete(false);
+      setConsultaParaDeletar(null);
+    } catch (error) {
+      console.error("Erro ao deletar consulta: ", error);
+      alert("Não foi possível deletar a consulta");
+    }
+  }
+
+  async function fetchConsultas() {
+
+  }
+
+  const openPopupHorario = (id_medico, diaIndex) => {
+    setMedicoSelecionadoId(id_medico);
     setDiaSelecionado(diaIndex);
     setShowPopup(true);
   };
@@ -70,10 +205,10 @@ function Gerenciamento() {
     setShowPopup(false);
   };
 
-  const handleAddStandardHours = (medicoId, diaIndex) => {
+  const handleAddStandardHours = (id_medico, diaIndex) => {
     const horariosPadrao = ["08:00", "09:00", "10:00", "11:00", "14:00", "15:00", "16:00"];
     setMedicos((prev) => prev.map(m => {
-      if (m.id !== medicoId) return m;
+      if (m.id !== id_medico) return m;
       const novosDias = [...m.diasAtendimento];
       const horariosExistentes = novosDias[diaIndex].horarios.map(h => h.hora);
       horariosPadrao.forEach(horario => {
@@ -85,27 +220,152 @@ function Gerenciamento() {
     }));
   };
 
-  const handleAddDiaAtendimentoClick = (medicoId) => {
-    setMedicoSelecionadoId(medicoId);
+  const handleAddDiaAtendimentoClick = (id_medico) => {
+    setMedicoSelecionadoId(id_medico);
     setShowAddDayPopup(true);
-    setDayToAdd({ dia: "", data: "" });
   };
 
-  const handleConfirmAddDay = (novoDia) => {
+  function formatDateToMySQL(dateStr) {
+    // Se já estiver no formato ISO (como '2025-06-23T03:00:00.000Z')
+    if (dateStr.includes('T')) {
+        const dateObj = new Date(dateStr);
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    // Se estiver no formato 'DD/MM/AAAA'
+    else if (dateStr.includes('/')) {
+        const [dia, mes, ano] = dateStr.split('/');
+        return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+    }
+    // Se já estiver no formato MySQL (como fallback)
+    else {
+        return dateStr;
+    }
+  }
+
+  function formatarDataVisual(dateStr) {
+    const d = new Date(dateStr);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth()).padStart(2, '0');
+    const dia = String(d.getDate() + 1).padStart(2, '0');
+    return `${dia}-${mes}-${ano}`;
+  }
+
+
+
+  const handleConfirmAddDay = async (novoDia) => {
     if (!novoDia.dia || !novoDia.data || medicoSelecionadoId === null) return;
-    setMedicos((prev) => prev.map(m => {
-      if (m.id !== medicoSelecionadoId) return m;
-      const novosDias = [...m.diasAtendimento, { dia: novoDia.dia, data: novoDia.data, horarios: [] }];
-      return { ...m, diasAtendimento: novosDias };
-    }));
-    setShowAddDayPopup(false);
-  };
+
+    try {
+      const token = localStorage.getItem("token");
+      console.log("Enviando dados para criarDia:", {
+        id_medico: medicoSelecionadoId,
+        dia_semana: novoDia.dia,
+        data_atendimento: novoDia.data
+      });
+
+      const response = await fetch("http://localhost:3000/criarDia", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          id_medico: medicoSelecionadoId,
+          dia_semana: novoDia.dia,
+          data_atendimento: formatDateToMySQL(novoDia.data) 
+        })
+      });
+
+      if (!response.ok) {
+        const errorMsg = await response.text();
+        throw new Error("Erro ao criar dia de atendimento ${errorMsg}");
+      }
+      
+      const diaCriado = await response.json();
+      console.log("Dia criado:", diaCriado);
+
+      setMedicos((prev) =>
+        prev.map((m) => {
+          if (m.id !== medicoSelecionadoId) return m;
+          const novosDias = [...m.diasAtendimento, {
+            id_dia: diaCriado.id_dia,
+            dia: diaCriado.dia,
+            data: diaCriado.data,
+            horarios: [] 
+          }];
+          return { ...m, diasAtendimento: novosDias };
+        })
+      );
+
+      setShowAddDayPopup(false);
+    } catch (error) {
+      console.error("Erro ao adicionar dia:", error);
+      alert("Erro ao adicionar novo dia de atendimento.");
+    };
+  }
+
+  async function fetchDiasPorMedico(id_medico) {
+    try{
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3000/getDia/${id_medico}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) throw new Error('Erro ao buscar dias de atendimento');
+
+      const dias = await response.json()
+      console.log("Dias recebidos do backend para o médico", id_medico, dias);
+      return dias;
+
+    } catch (error){
+      console.error('Erro ao buscar dias:', error);
+      return [];
+    }
+  }
 
   const abrirConfirmDelete = (medico) => {
     setMedicoParaDeletar(medico);
     setShowConfirmDelete(true);
   };
 
+  const handleDeleteDay = async (id_medico, id_dia) => {
+    try{
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3000/deleteDia/${id_dia}`, {
+        method: "DELETE",
+          headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+          }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();  
+        throw new Error(errorData.message || 'Erro ao deletar dia');
+      }
+
+      setMedicos(prev => 
+        prev.map(medico => {
+          if (medico.id !== id_medico) return medico;
+          return {
+            ...medico,
+            diasAtendimento: medico.diasAtendimento.filter(dia => dia.id_dia !== id_dia)
+          };
+        })
+      );
+
+    } catch (error) {
+      console.error("Erro ao deletar dia:", error);
+      alert("Não foi possível deletar o dia de atendimento");
+    }
+  };
 
   const handleAddOrUpdateMedico = async () => {
     let valid = true;
@@ -123,7 +383,7 @@ function Gerenciamento() {
       valid = false;
     }
     if (!valid) {
-      setErros(novosErros);
+      setErrosMedico(novosErros);
       return;
     }
 
@@ -196,7 +456,7 @@ function Gerenciamento() {
         setMedicoCRM("");
         setMedicoEspecializacao("");
         setMedicoNotas("");
-        setErros({ nome: "", crm: "", especializacao: "" });
+        setErrosMedico({ nome: "", crm: "", especializacao: "" });
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -254,12 +514,24 @@ function Gerenciamento() {
       if (!response.ok) throw new Error('Erro ao buscar médicos');
 
       const data = await response.json();
-      const medicosFormatados = data.map(m => ({
-        ...m,
-        id: m.id_medico,
-        diasAtendimento: [],
-      }));
-      setMedicos(medicosFormatados);
+
+      const medicosComDias = await Promise.all(
+        data.map(async (m) => {
+          const dias = await fetchDiasPorMedico(m.id_medico);
+          return {
+            ...m,
+            id: m.id_medico,
+            diasAtendimento: dias.map((dia) => ({
+              id_dia: dia.id_dia,
+              dia: dia.dia_semana,
+              data: dia.data_atendimento,
+              horarios: []
+            })),
+          };
+        })
+      );
+
+      setMedicos(medicosComDias);
     } catch (error) {
       console.error('Erro ao buscar médicos:', error);
     }
@@ -285,9 +557,35 @@ function Gerenciamento() {
           isOpen={showAddDayPopup}
           onClose={() => setShowAddDayPopup(false)}
           onConfirm={handleConfirmAddDay}
-          dayToAdd={dayToAdd}
           setDayToAdd={setDayToAdd}
+
         />
+
+        {showConfirmDeleteDay && (
+          <div className="fixed inset-0 bg-white bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg">
+              <h3 className="text-lg font-semibold mb-4 text-gray-900">Confirmar exclusão</h3>
+                <p className="mb-6">Tem certeza que deseja remover este dia de atendimento?</p>
+                  <div className="flex justify-end gap-4">
+                    <button
+                      onClick={() => setShowConfirmDeleteDay(false)}
+                      className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleDeleteDay(dayToDelete.medicoId, dayToDelete.diaId);
+                        setShowConfirmDeleteDay(false);
+                      }}
+                      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    >
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -329,42 +627,42 @@ function Gerenciamento() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nome *</label>
                   <input
                     type="text"
-                    className={`w-full border ${erros.nome ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
+                    className={`w-full border ${errosMedico.nome ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                     value={medicoNome}
                     onChange={(e) => {
                       setMedicoNome(e.target.value);
-                      setErros({ ...erros, nome: "" });
+                      setErrosMedico({ ...erros, nome: "" });
                     }}
                   />
-                  {erros.nome && <p className="text-red-500 text-xs mt-1">{erros.nome}</p>}
+                  {errosMedico.nome && <p className="text-red-500 text-xs mt-1">{errosMedico.nome}</p>}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">CRM *</label>
                   <input
                     type="text"
-                    className={`w-full border ${erros.crm ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
+                    className={`w-full border ${errosMedico.crm ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                     value={medicoCRM}
                     onChange={(e) => {
                       setMedicoCRM(e.target.value);
-                      setErros({ ...erros, crm: "" });
+                      setErrosMedico({ ...erros, crm: "" });
                     }}
                   />
-                  {erros.crm && <p className="text-red-500 text-xs mt-1">{erros.crm}</p>}
+                  {errosMedico.crm && <p className="text-red-500 text-xs mt-1">{errosMedico.crm}</p>}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Especialização *</label>
                   <input
                     type="text"
-                    className={`w-full border ${erros.especializacao ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
+                    className={`w-full border ${errosMedico.especializacao ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                     value={medicoEspecializacao}
                     onChange={(e) => {
                       setMedicoEspecializacao(e.target.value);
-                      setErros({ ...erros, especializacao: "" });
+                      setErrosMedico({ ...erros, especializacao: "" });
                     }}
                   />
-                  {erros.especializacao && <p className="text-red-500 text-xs mt-1">{erros.especializacao}</p>}
+                  {errosMedico.especializacao && <p className="text-red-500 text-xs mt-1">{errosMedico.especializacao}</p>}
                 </div>
 
                 <div className="md:col-span-1">
@@ -387,7 +685,7 @@ function Gerenciamento() {
                     setMedicoCRM("");
                     setMedicoEspecializacao("");
                     setMedicoNotas("");
-                    setErros({ nome: "", crm: "", especializacao: "" });
+                    setErrosMedico({ nome: "", crm: "", especializacao: "" });
                   }}
                   className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg transition duration-200"
                 >
@@ -434,7 +732,7 @@ function Gerenciamento() {
                       <button
                         onClick={() => handleAddDiaAtendimentoClick(medico.id)}
                         className="bg-white text-[#008E9A] px-3 py-1 rounded text-sm font-medium hover:bg-gray-100"
-                        title="Adicionar dia"
+                        title="Adicionar agendamento"
                       >
                         + Dia
                       </button>
@@ -474,9 +772,21 @@ function Gerenciamento() {
                     <div key={`${medico.id}-${diaIndex}`} className="mb-6 last:mb-0 border-b pb-4 last:border-b-0">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
                         <h3 className="text-lg font-semibold text-gray-800">
-                          {dia.dia} - {dia.data}
+                          {dia.dia.toUpperCase()} - {formatarDataVisual(dia.data)}
                         </h3>
                         <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              setDayToDelete({ medicoId: medico.id, diaId: dia.id_dia });
+                              setShowConfirmDeleteDay(true);
+                            }}
+                            className="text-red-500 text-sm font-medium hover:text-red-700 flex items-center gap-1"
+                            title="Remover dia"
+                          >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          </button>
                           <button
                             onClick={() => openPopupHorario(medico.id, diaIndex)}
                             className="text-[#008E9A] text-sm font-medium hover:text-[#006670] flex items-center gap-1"
@@ -564,4 +874,4 @@ function Gerenciamento() {
   );
 }
 
-export default Gerenciamento;
+export default Gerenciamento; 
