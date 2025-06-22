@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 const WhatsAppIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -23,16 +26,25 @@ const AgendamentoPopup = ({ isOpen, onClose, onConfirmBooking, medico, data, hor
   const [observacoes, setObservacoes] = useState('');
   const [pagamentoSelecionado, setPagamentoSelecionado] = useState(null);
   const [mostrarOpcoesPagamento, setMostrarOpcoesPagamento] = useState(false);
-  const [setErroHorario] = useState(''); 
+  const [erroHorario, setErroHorario] = useState(''); 
   const [erroNomeResponsavel, setErroNomeResponsavel] = useState('');
   const [erroCpfOuRgResponsavel, setErroCpfOuRgResponsavel] = useState('');
   const [erroTelefoneResponsavel, setErroTelefoneResponsavel] = useState('');
   const [erroNomePaciente, setErroNomePaciente] = useState('');
   const [erroIdadePaciente, setErroIdadePaciente] = useState('');
   const [erroPagamento, setErroPagamento] = useState('');
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [medicoSelecionadoId, setMedicoSelecionadoId] = useState("")
+
 
   useEffect(() => {
-    setHorario(initialHorario || '');
+    if (initialHorario) {
+      const [horas, minutos] = initialHorario.split(':');
+      const date = new Date();
+      date.setHours(parseInt(horas), parseInt(minutos));
+      setSelectedTime(date);
+      setHorario(initialHorario);
+    }
   }, [initialHorario]);
 
   const formasPagamento = [
@@ -40,6 +52,16 @@ const AgendamentoPopup = ({ isOpen, onClose, onConfirmBooking, medico, data, hor
     { id: 2, nome: 'PIX', icone: '🧾' },
     { id: 3, nome: 'Boleto Bancário', icone: '📄' }
   ];
+
+  const handleTimeChange = (date) => {
+    setSelectedTime(date);
+
+    // Atualiza a string do horário no formato HH:mm
+    const horas = date.getHours().toString().padStart(2, '0');
+    const minutos = date.getMinutes().toString().padStart(2, '0');
+    setHorario(`${horas}:${minutos}`);
+  };
+
 
   const validarHorario = (hora) => {
     const regex = /^([0-1]?[0-9]|2?[0-3]):([0-5]?[0-9])$/;
@@ -99,47 +121,13 @@ const AgendamentoPopup = ({ isOpen, onClose, onConfirmBooking, medico, data, hor
       setErroPagamento("");
     }
 
-    if (valido) {
-      onConfirmBooking({ medico, data, horario, nomeResponsavel, cpfOuRgResponsavel, telefoneResponsavel, emailResponsavel, nomePaciente, idadePaciente, convenio, observacoes, pagamento: pagamentoSelecionado.nome });
+    const horas = selectedTime.getHours().toString().padStart(2,'0');
+    const minutos = selectedTime.getMinutes().toString().padStart(2, '0');
+    const horarioFomatado = `${horas}:$(minutos)`;
 
-      let message = `Olá, gostaria de confirmar meu agendamento com ${medico} no dia ${data} às ${horario}.\n`;
-      message += `*DADOS DO RESPONSÁVEL:*\n`;
-      message += `Nome: ${nomeResponsavel}\n`;
-      message += `CPF/RG: ${cpfOuRgResponsavel}\n`;
-      message += `Telefone: ${telefoneResponsavel}\n`;
-      if (emailResponsavel) message += `Email: ${emailResponsavel}\n`;
-      message += `\n*DADOS DO PACIENTE:*\n`;
-      message += `Nome: ${nomePaciente}\n`;
-      message += `Idade: ${idadePaciente} anos\n`;
-      if (convenio) message += `Convênio: ${convenio}\n`;
-      message += `\n*DETALHES DA CONSULTA:*\n`;
-      message += `Valor: ${valorConsulta}\n`;
-      message += `Forma de pagamento: ${pagamentoSelecionado.nome}\n`;
-      if (observacoes) message += `Observações: ${observacoes}\n`;
-
-      const phoneNumber = "5547984747598";
-      window.open(`http://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
-      
-      setHorario(initialHorario || '');
-      setNomeResponsavel('');
-      setCpfOuRgResponsavel('');
-      setTelefoneResponsavel('');
-      setEmailResponsavel('');
-      setNomePaciente('');
-      setIdadePaciente('');
-      setConvenio('');
-      setObservacoes('');
-      setPagamentoSelecionado(null);
-      setMostrarOpcoesPagamento(false);
-      setErroHorario('');
-      setErroNomeResponsavel('');
-      setErroCpfOuRgResponsavel('');
-      setErroTelefoneResponsavel('');
-      setErroNomePaciente('');
-      setErroIdadePaciente('');
-      setErroPagamento('');
-      onClose();
-    }
+    onConfirmBooking({
+      horario: horarioFomatado,
+    });
   };
 
   const selecionarPagamento = (forma) => {
@@ -176,14 +164,14 @@ const AgendamentoPopup = ({ isOpen, onClose, onConfirmBooking, medico, data, hor
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className={styles.popupContainer}>
         <div className={styles.popupContent}>
-          <h2 className={styles.title}>Confirme seu agendamento</h2>
+          <h2 className={styles.title}>Novo agendamento</h2>
           
           <div className={styles.detailsContainer}>
             <p className="font-semibold text-[#008E9A] mb-2">Detalhes do Agendamento</p>
             <div className="space-y-3">
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Médico:</span>
-                <span className={styles.detailValue}>{medico}</span>
+                <span className={styles.detailValue}>{medicoSelecionadoId.nome}</span>
               </div>
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Data:</span>
@@ -195,8 +183,20 @@ const AgendamentoPopup = ({ isOpen, onClose, onConfirmBooking, medico, data, hor
               </div>
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Horário:</span>
-                <span className={styles.detailValue}>{horario}</span>
-              </div>
+                  <div className="ml-auto w-[160px]">
+                    <DatePicker
+                      selected={selectedTime}
+                      onChange={handleTimeChange}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={60}
+                      timeCaption="Horário"
+                      dateFormat="HH:mm"
+                      placeholderText="Selecionar"
+                      className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#008E9A] focus:border-[#008E9A] outline-none"
+                    />
+                  </div>
+                </div>
             </div>
           </div>
 
@@ -391,7 +391,7 @@ const AgendamentoPopup = ({ isOpen, onClose, onConfirmBooking, medico, data, hor
           </div>
 
           <div className="mt-6">
-            <h3 className={styles.sectionTitle}>Finalizar agendamento</h3>
+            <h3 className={styles.sectionTitle}>Salvar agendamento</h3>
             <button
               onClick={handleConfirmClick}
               className={styles.confirmButton}
@@ -400,7 +400,14 @@ const AgendamentoPopup = ({ isOpen, onClose, onConfirmBooking, medico, data, hor
               Confirmar Agendamento via WhatsApp
             </button>
           </div>
-
+          <div className="mt-4">
+            <button
+              onClick={handleConfirmClick}
+              className="flex items-center justify-center gap-3 bg-[#007bff] hover:bg-[#0062cc] text-white font-bold py-3 px-6 rounded-lg w-full transition-all shadow-lg hover:shadow-xl text-lg"
+            >
+            Salvar
+            </button>
+          </div>
           <button
             onClick={onClose}
             className={styles.closeButton}
@@ -417,7 +424,7 @@ AgendamentoPopup.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onConfirmBooking: PropTypes.func.isRequired,
-  medico: PropTypes.string.isRequired,
+  medico: PropTypes.object.isRequired,
   data: PropTypes.string.isRequired,
   horario: PropTypes.string.isRequired,
 };

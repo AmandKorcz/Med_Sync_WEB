@@ -36,82 +36,27 @@ function Gerenciamento() {
   const [mostrarFormConsulta, setMostrarFormConsulta] = useState(false);
   const [consultaParaDeletar, setConsultaParaDeletar] = useState(null);
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showAddConsultaPopup, setShowAddConsultaPopup] = useState(false);
   const [showAddDayPopup, setShowAddDayPopup] = useState(false);
   const [diaSelecionado, setDiaSelecionado] = useState(null);
   const [medicoSelecionadoId, setMedicoSelecionadoId] = useState(null);
   const [dayToAdd, setDayToAdd] = useState(null); 
   const [showConfirmDeleteDay, setShowConfirmDeleteDay] = useState(false);
   const [dayToDelete, setDayToDelete] = useState(null);
+  const [horarioSelecionado, setHorarioSelecionado] = useState(null);
+  const [confirmAddBooking, setConfirmAddBooking] = useState("");
 
-  const handleAddConsulta = async () => {
-    let valid = true;
-    const novosErros = {id_medico: "", data: "", hora: "", paciente: "", obs: ""};
-    if (!medicoConsulta.trim()){
-      novosErros.data = "Médico é obrigatório";
-      valid = false;
-    }
-    if (!dataConsulta.trim()) {
-      novosErros.data = "Data da consulta é obrigatória";
-      valid = false;
-    }
-    if (!horaConsulta.trim()){
-      novosErros.hora = "Hora da consulta é obrigatória";
-      valid = false;
-    }
-    if (!nomePaciente.trim()) {
-      novosErros.paciente = "Nome do paciente é obrigatório";
-      valid = false;
-    }
-    if (!valid) {
-      setErrosConsulta(novosErros);
-      return;
-    }
+  const handleAddConsulta = async (novaConsulta, medico, dia_atendimento) => {
+    setMedicoSelecionadoId(medico);
+    setDiaSelecionado(dia_atendimento);
 
     try {
-      if (editandoConsulta !== null) {
-        //Atualizando consulta existente (PUT)
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/editConsulta/${editandoConsulta}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            id_medico: medicoSelecionadoId,
-            data: dataConsulta,
-            hora: horaConsulta,
-            paciente: nomePaciente,
-            obs: obsConsulta
-          })
-        });
-
-        if (!response.ok) throw new Error("Erro ao atualizar a consulta");
-
-        const consultaAtualizada = await response.json();
-
-        setConsultas (prev => 
-          prev.map(m =>
-            m.id === editandoConsulta
-            ? { ...consultaAtualizada, diasAtendimento: m.diasAtendimento || [] }
-            : m
-          )
-        );
-
-        await fetchConsultas();
-        setMostrarFormConsulta(false);
-        setEditandoConsulta(null);
-        setMedicoConsulta("");
-        setDataConsulta("");
-        setHoraConsulta("");
-        setNomePaciente("");
-        setObsConsulta("");
-
-        window.scrollTo({ top: 0, behavior: 'smooth'});
-      } else {
         //Criar nova consulta (POST)
         const token = localStorage.getItem('token');
+        console.log("Enviando dados para CriarConsulta: ", {
+          id_medico: medico.id_medico,
+          hora: novaConsulta.hora
+        })
         const response = await fetch("http://localhost:3000/criarConsulta", {
           method: "POST",
           headers: { 
@@ -119,20 +64,18 @@ function Gerenciamento() {
             "Authorization": `Bearer ${token}`
           },
           body: JSON.stringify({
-            id_medico: medicoSelecionadoId,
-            hora: horaConsulta,
-            data: dataConsulta,
-            paciente: nomePaciente,
-            obs: obsConsulta
+            id_medico: medico,
+            hora: novaConsulta.hora
           })
         });
 
         if (!response.ok) throw new Error("Erro ao criar consulta");
 
-        const novaConsulta = await response.json();
+        const consultaCriada = await response.json();
+        console.log("Consulta criada: ", consultaCriada)
 
         setConsultas(prev => [...prev, { ...novaConsulta, diasAtendimento: [] }]);
-        setMostrarFormConsulta(false);
+        setConfirmAddBooking(false);
 
         await fetchConsultas();
         setMedicoConsulta("");
@@ -143,13 +86,12 @@ function Gerenciamento() {
         setErrosConsulta({ data: "", hora: "", paciente: "", obs: ""});
 
         window.scrollTo({ top: 0, behavior: 'smooth'});
-      }
     } catch (error) {
       console.error("Erro: ", error);
       alert("Ocorreu um erro ao salvar a consulta.");
     }
   };
-
+  
   const handleEditConsulta = (consulta) => {
     setMedicoConsulta(consulta.id_medico);
     setDataConsulta(consulta.data);
@@ -187,33 +129,42 @@ function Gerenciamento() {
 
   }
 
-  const openPopupHorario = (id_medico, diaIndex) => {
-    setMedicoSelecionadoId(id_medico);
-    setDiaSelecionado(diaIndex);
-    setShowPopup(true);
+  const openPopupHorario = (medico, data) => {
+    setMedicoSelecionadoId(medico);
+    setDiaSelecionado(data);
+    setHoraConsulta("");
+    setShowAddConsultaPopup(true);
   };
 
-  const handleConfirmarHorario = (novoHorario) => {
-    if (medicoSelecionadoId === null || diaSelecionado === null) return;
-    setMedicos((prev) => prev.map(m => {
-      if (m.id !== medicoSelecionadoId) return m;
-      const novosDias = [...m.diasAtendimento];
-      const novoHorarioObj = { id: Date.now(), hora: novoHorario, paciente: "", status: "" };
-      novosDias[diaSelecionado].horarios.push(novoHorarioObj);
-      return { ...m, diasAtendimento: novosDias };
-    }));
-    setShowPopup(false);
+  const handleConfirmarHorario = (dados) => {
+    setDataConsulta(dados.data);
+    setHoraConsulta(dados.horario);
+    setNomePaciente(dados.nomePaciente);
+    setObsConsulta(dados.obsConsulta);
+
+    setMedicoConsulta(medicoSelecionadoId?.id_medico);
+
+    handleAddConsulta({
+      hora: dados.horario,
+      data: dados.data,
+      nomePaciente: dados.nomePaciente,
+      obsConsulta: dados.obsConsulta
+    },
+    medicoSelecionadoId,
+    diaSelecionado
+    );
+    setShowAddConsultaPopup(false);
   };
 
-  const handleAddStandardHours = (id_medico, diaIndex) => {
+  const handleAddStandardHours = (id_medico, id_dia) => {
     const horariosPadrao = ["08:00", "09:00", "10:00", "11:00", "14:00", "15:00", "16:00"];
     setMedicos((prev) => prev.map(m => {
       if (m.id !== id_medico) return m;
       const novosDias = [...m.diasAtendimento];
-      const horariosExistentes = novosDias[diaIndex].horarios.map(h => h.hora);
+      const horariosExistentes = novosDias[id_dia].horarios.map(h => h.hora);
       horariosPadrao.forEach(horario => {
         if (!horariosExistentes.includes(horario)) {
-          novosDias[diaIndex].horarios.push({ id: Date.now() + Math.random(), hora: horario, paciente: "", status: "" });
+          novosDias[id_dia].horarios.push({ id: Date.now() + Math.random(), hora: horario, paciente: "", status: "" });
         }
       });
       return { ...m, diasAtendimento: novosDias };
@@ -252,8 +203,6 @@ function Gerenciamento() {
     const dia = String(d.getDate() + 1).padStart(2, '0');
     return `${dia}-${mes}-${ano}`;
   }
-
-
 
   const handleConfirmAddDay = async (novoDia) => {
     if (!novoDia.dia || !novoDia.data || medicoSelecionadoId === null) return;
@@ -548,9 +497,12 @@ function Gerenciamento() {
 
       <main className="flex-1 container mx-auto py-20 px-4 sm:px-6 lg:px-8">
         <PopupHorario
-          isOpen={showPopup}
-          onClose={() => setShowPopup(false)}
-          onConfirm={handleConfirmarHorario}
+          isOpen={showAddConsultaPopup}
+          onClose={() => setShowAddConsultaPopup(false)}
+          onConfirmBooking={handleConfirmarHorario}
+          setConfirmAddBooking={setConfirmAddBooking}
+          medico={medicoSelecionadoId}
+          dia_atendimento={diaSelecionado}
         />
 
         <NewDayPopup 
@@ -558,7 +510,6 @@ function Gerenciamento() {
           onClose={() => setShowAddDayPopup(false)}
           onConfirm={handleConfirmAddDay}
           setDayToAdd={setDayToAdd}
-
         />
 
         {showConfirmDeleteDay && (
@@ -631,7 +582,7 @@ function Gerenciamento() {
                     value={medicoNome}
                     onChange={(e) => {
                       setMedicoNome(e.target.value);
-                      setErrosMedico({ ...erros, nome: "" });
+                      setErrosMedico((prev) => ({ ...prev, nome: "" }));
                     }}
                   />
                   {errosMedico.nome && <p className="text-red-500 text-xs mt-1">{errosMedico.nome}</p>}
@@ -768,8 +719,8 @@ function Gerenciamento() {
 
 
                 <div className="p-4 sm:p-6">
-                  {(medico.diasAtendimento || []).map((dia, diaIndex) => (
-                    <div key={`${medico.id}-${diaIndex}`} className="mb-6 last:mb-0 border-b pb-4 last:border-b-0">
+                  {(medico.diasAtendimento || []).map((dia, id_dia) => (
+                    <div key={`${medico.id}-${id_dia}`} className="mb-6 last:mb-0 border-b pb-4 last:border-b-0">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
                         <h3 className="text-lg font-semibold text-gray-800">
                           {dia.dia.toUpperCase()} - {formatarDataVisual(dia.data)}
@@ -788,7 +739,7 @@ function Gerenciamento() {
                           </svg>
                           </button>
                           <button
-                            onClick={() => openPopupHorario(medico.id, diaIndex)}
+                            onClick={() => openPopupHorario(medico, dia)}
                             className="text-[#008E9A] text-sm font-medium hover:text-[#006670] flex items-center gap-1"
                             title="Adicionar horário personalizado"
                           >
@@ -798,7 +749,7 @@ function Gerenciamento() {
                             Horário
                           </button>
                           <button
-                            onClick={() => handleAddStandardHours(medico.id, diaIndex)}
+                            onClick={() => handleAddStandardHours(id_medico, id_dia)}
                             className="text-blue-500 text-sm font-medium hover:text-blue-700 flex items-center gap-1"
                             title="Adicionar horários padrão"
                           >
@@ -821,7 +772,7 @@ function Gerenciamento() {
                             }`}
                           >
                             <button
-                              onClick={() => handleDeleteHorario(medico.id, diaIndex, horario.id)}
+                              onClick={() => handleDeleteHorario(medico.id, id_dia, horario.id)}
                               className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
                               title="Remover horário"
                             >
@@ -835,7 +786,7 @@ function Gerenciamento() {
                               <div className="text-gray-700">
                                 <span className="font-medium">Paciente:</span> {horario.paciente}
                                 <button
-                                  onClick={() => handleAddPaciente(medico.id, diaIndex, horarioIndex, "")}
+                                  onClick={() => handleAddPaciente(medico.id, dia_id, horarioIndex, "")}
                                   className="ml-2 text-red-500 text-xs hover:text-red-700"
                                 >
                                   Cancelar
@@ -847,10 +798,10 @@ function Gerenciamento() {
                                   type="text"
                                   placeholder="Nome do paciente"
                                   className="flex-1 border border-gray-300 rounded px-3 py-1 text-sm"
-                                  onBlur={(e) => handleAddPaciente(medico.id, diaIndex, horarioIndex, e.target.value)}
+                                  onBlur={(e) => handleAddPaciente(medico.id, id_dia, horarioIndex, e.target.value)}
                                   onKeyPress={(e) => {
                                     if (e.key === 'Enter') {
-                                      handleAddPaciente(medico.id, diaIndex, horarioIndex, e.target.value);
+                                      handleAddPaciente(medico.id, id_dia, horarioIndex, e.target.value);
                                       e.target.blur();
                                     }
                                   }}
