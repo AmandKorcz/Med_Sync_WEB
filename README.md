@@ -1,5 +1,5 @@
 <h1>MedSync 🩺</h1>
-
+by Amanda Korczagin & Flavia Antonieli 
 <h2>Aplicação WEB 💻</h2>
 O projeto aporta a ideia de desenvolver um projeto web de agendamento de consultas em uma clínica pediátrica.<br>
 O modelo web prioriza uma interface clara e objetiva, na qual o usuário tem acesso a agenda dos médicos.<br>
@@ -31,23 +31,27 @@ O projeto explora as seguintes tecnologias
 
 ✅ Login de secretárias, para autenticação dos usuários <br>
 ✅ Visualização da agenda dos médicos, por parte do paciente <br>
-❌ Possibilidade de adicionar novo médico na agenda <br>
-❌ Agendamente de uma consulta na agenda do médico por parte da secretária <br>
-❌ Alteração do cadastro de médico <br>
-❌ Alteração do agendamento por parte da secretária <br>
-❌ Exclusão do agendamento por parte da secretária <br>
-❌ Exclusão do cadastro do médico (?) <br>
+✅ Possibilidade de adicionar novo médico na agenda <br>
+✅ Agendamente de uma consulta na agenda do médico por parte da secretária <br>
+✅ Alteração do cadastro de médico <br>
+✅ Alteração do agendamento por parte da secretária <br>
+✅ Exclusão do agendamento por parte da secretária <br>
+✅ Exclusão do cadastro do médico (?) <br>
 ✅ Confirmação de agendamento (redirecionamento para WhatsApp) <br>
 ✅ Acesso às informações do médico: agenda, especialização, CRM. <br>
+✅ Acesso ao informativo (artigos e noticias) <br>
+✅ Detalhes sobre planos e convênio <br>
 ✅ Página com mais informações sobre a clínica/equipe 
-
 
 <h3>Requisitos Não Funcionais</h3>
 
 ✅ Proteção de dados sensíveis - Login com chave encriptada <br>
 ✅ Tempo de resposta rápido para agendamentos e consultas <br>
-❌ Suporte a múltiplos usuários simultaneamente <br>
+✅ Atendimento facilitado e retorno de dúvidas (FAQ) <br>
+✅ Suporte a múltiplos usuários simultaneamente <br>
 ✅ Ferramenta para controle de atividades <br>
+✅ Interface responsiva <br> 
+❌ Implementação CI/CD. 
 
 <h2>Detalhamento 📌</h2>
 <h3>Operações CRUD</h3>
@@ -64,22 +68,5 @@ Integração com a API do backend.<br>
 
 <h3>Backend</h3>
 Criação das APIs para autenticação<br>
-Agendamento e gerenciamento de perfis<br>
+Agendamento e gerenciamento de perfis com JavaScript <br>
 Gerenciamento da agenda<br>
-
-<h2>Alterações e avaliações do professor ⚖</h2>
-
-Ajustes sugeridos - primeira interação 24/02 Não foram feitas alterações significativas em relação ao projeto inicial apresentado pela equipe. <br>
-O projeto foi aceito pelo Professor orientador com entusiasmo, levando em consideração o protótipo do Figma apresentado.<br>
-<br>
-
-Ajustes sugeridos - segunda interação 10/03 Não foram feitas alterações significativas em relação ao projeto inicial apresentado pela equipe. <br>
-O projeto foi aceito pelo Professor orientador com entusiasmo, levando em consideração o protótipo do Figma apresentado.<br>
-<br>
-
-Observação: Foi realizada uma alteração de funcionalidades no escopo do projeto no dia 21/03/2025, com o intuito de adiministrar as atividade de acordo com o tempo de desenvolvimento diponível.
-
-<h2>Dependências</h2>
-
-Vite: npm install vite --save-dev <br>
-
